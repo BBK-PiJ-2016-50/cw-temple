@@ -10,29 +10,29 @@ public class GraphNode {
   private Collection<NodeStatus> neighbours;
   private int distanceToOrb;
 
-  public GraphNode(long id, 
-                   boolean hasBeenVisited,
-                   Collection<NodeStatus> neighbours,
-                   int distanceToOrb) {
+  public GraphNode(final long id,
+                   final boolean hasBeenVisited,
+                   final Collection<NodeStatus> neighbours,
+                   final int distanceToOrb) {
     this.id = id;
     this.hasBeenVisited = hasBeenVisited;
     this.neighbours = neighbours;
     this.distanceToOrb = distanceToOrb;
   }
 
-  public void setId(long id) {
+  public void setId(final long id) {
     this.id = id;
   }
 
-  public void setHasBeenVisited(boolean hasBeenVisited) {
+  public void setHasBeenVisited(final boolean hasBeenVisited) {
     this.hasBeenVisited = hasBeenVisited;
   }
 
-  public void setNeighbours(Collection<NodeStatus> neighbours) {
+  public void setNeighbours(final Collection<NodeStatus> neighbours) {
     this.neighbours = neighbours;
   }
 
-  public void setDistanceToOrb(int distanceToOrb) {
+  public void setDistanceToOrb(final int distanceToOrb) {
     this.distanceToOrb = distanceToOrb;
   }
 
