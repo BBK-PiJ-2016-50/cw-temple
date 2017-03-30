@@ -44,40 +44,27 @@ public class Explorer {
 
     //create a stack.  This will keep track of nodes that have been visited
     //create a new graph. Nodes will be added to graph and connected to each other via graph
-    //need to keep track of current node.  This gets updated at the end of each loop
-    //add root node to stack = new Node
+    //need to keep track of current node.  This gets updated at the end of each loop - may not need this. Could use stack.peek at end of while loop
+    //add root node to stack = new GraphNode()
 
     //while (!orbFound(state)) - check to see if distance to target is 0.  If yes then orb found and return
 
     //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
+    //else:
     //create new Node with tile id, neighbours and hasBeenVisited information
 
-    //find information about neighbours of current tile
-    //make a decision as to which neighbour would be most appropriate to move to
+    //find information about neighbours of current tile Node.getNeighbours
+    //if tile has an edge then keep following the edge if possible for subsequent nodes
+    //make a decision as to which neighbour would be most appropriate to move to using NodeStatus.compareTo()
 
-    //moveTo()
+    //connect current node with node we are moving to
+    //moveTo() tile with id that was determined as the best next option
+    //stack.push operation
+    //update current node with node moved to (or could this be done using stack.peek, rather than keeping separate current node variable?
+
 
     //return; - executes when distance to target is 0
 
-
-
-    long tile = 0;
-    Collection<NodeStatus> neighbours = state.getNeighbours();
-    for (game.NodeStatus n : neighbours) {
-      tile = n.getId();
-      System.out.println(n.getDistanceToTarget());
-    }
-    state.moveTo(tile);
-    System.out.println(state.getDistanceToTarget());
-    System.out.println(state.getCurrentLocation());
-
-
-    //call state.getCurrentLocation() - this gives a tile id
-    //call state.getNeighbours() - this gives tiles that can be moved to plus distance to orb
-    //with this information check to see which neighbour tile has closest distance to orb
-    //if tile has an edge then keep following the edge if possible for subsequent nodes
-    //call state.moveTo(id of tile closest to orb) - moves the explorer
-    //call explore(state) and pass in the new state
   }
 
   //checks to see if orb found.  Orb is found if distance to target is 0
