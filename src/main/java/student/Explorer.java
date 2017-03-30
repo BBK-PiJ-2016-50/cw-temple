@@ -2,6 +2,11 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import game.Node;
+import game.NodeStatus;
+
+import java.util.Collection;
+import java.util.Stack;
 
 public class Explorer {
 
@@ -36,7 +41,48 @@ public class Explorer {
    * @param state the information available at the current state
    */
   public void explore(ExplorationState state) {
-    //TODO:
+
+    //create a stack.  This will keep track of nodes that have been visited
+    //create a new graph. Nodes will be added to graph and connected to each other via graph
+    //need to keep track of current node.  This gets updated at the end of each loop
+    //add root node to stack = new Node
+
+    //while (!orbFound(state)) - check to see if distance to target is 0.  If yes then orb found and return
+
+    //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
+    //create new Node with tile id, neighbours and hasBeenVisited information
+
+    //find information about neighbours of current tile
+    //make a decision as to which neighbour would be most appropriate to move to
+
+    //moveTo()
+
+    //return; - executes when distance to target is 0
+
+
+
+    long tile = 0;
+    Collection<NodeStatus> neighbours = state.getNeighbours();
+    for (game.NodeStatus n : neighbours) {
+      tile = n.getId();
+      System.out.println(n.getDistanceToTarget());
+    }
+    state.moveTo(tile);
+    System.out.println(state.getDistanceToTarget());
+    System.out.println(state.getCurrentLocation());
+
+
+    //call state.getCurrentLocation() - this gives a tile id
+    //call state.getNeighbours() - this gives tiles that can be moved to plus distance to orb
+    //with this information check to see which neighbour tile has closest distance to orb
+    //if tile has an edge then keep following the edge if possible for subsequent nodes
+    //call state.moveTo(id of tile closest to orb) - moves the explorer
+    //call explore(state) and pass in the new state
+  }
+
+  //checks to see if orb found.  Orb is found if distance to target is 0
+  private boolean orbFound(ExplorationState state) {
+    return state.getDistanceToTarget() == 0;
   }
 
   /**
