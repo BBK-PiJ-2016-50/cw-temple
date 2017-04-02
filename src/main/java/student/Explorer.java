@@ -41,35 +41,63 @@ public class Explorer {
    * @param state the information available at the current state
    */
   public void explore(ExplorationState state) {
+    //note that the state object automatically updates after making a move
+    //depth first search - best to use in conjunction with distance of tiles from orb
 
-    //create a stack.  This will keep track of nodes that have been visited
-    //create a new graph. Nodes will be added to graph and connected to each other via graph
+    //create a stack.  This keep track of nodes that have been visited
+    Stack<GraphNode> nodeStack = new Stack<>();
+
+    //create a graph. Nodes will be added to graph and connected to each other
+    Graph searchGraph = new Graph();
+
     //need to keep track of current node.  This gets updated at the end of each loop - may not need this. Could use stack.peek at end of while loop
-    //add root node to stack = new GraphNode()
 
-    //while (!orbFound(state)) - check to see if distance to target is 0.  If yes then orb found and return
+    //create rootNode for graph
+    GraphNode rootNode = new GraphNode(state.getCurrentLocation(),
+                                       state.getDistanceToTarget(),
+                                       state.getNeighbours(),
+                                      true);
 
-    //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
-    //else:
-    //create new Node with tile id, neighbours and hasBeenVisited information
+    //add root node to the graph
+    searchGraph.setRoot(rootNode);
 
-    //find information about neighbours of current tile Node.getNeighbours
-    //if tile has an edge then keep following the edge if possible for subsequent nodes
-    //make a decision as to which neighbour would be most appropriate to move to using NodeStatus.compareTo()
+    //add root node to stack
+    nodeStack.push(rootNode);
 
-    //connect current node with node we are moving to
-    //moveTo() tile with id that was determined as the best next option
-    //stack.push operation
-    //update current node with node moved to (or could this be done using stack.peek, rather than keeping separate current node variable?
+    //check to see if distance to target is 0.  If yes then orb found and return.  If not continue with search
+    while (!orbFound(state)) {
+      GraphNode currentNode = nodeStack.peek();
+      //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
+      if (pathBlocked(currentNode)) {
+        nodeStack.pop();
+      }
+      else:
+      //create new GraphNode with tile id, neighbours and hasBeenVisited information, distance to target (state.distanceToTarget)
+      //add new GraphNode to the graph
 
+      //find information about neighbours of current tile state.getNeighbours
+      //if tile has an edge then keep following the edge if possible for subsequent nodes
+      //make a decision as to which neighbour would be most appropriate to move to using NodeStatus.compareTo()
 
-    //return; - executes when distance to target is 0
+      //connect current node with node we are moving to (i.e. the parent to the child)
+      //moveTo() tile with id that was determined as the best next option
+      //stack.push operation
+      //update current node with node moved to (or could this be done using stack.peek, rather than keeping separate current node variable?
+
+      //return; - executes when distance to target is 0
+
+    }
 
   }
 
   //checks to see if orb found.  Orb is found if distance to target is 0
   private boolean orbFound(ExplorationState state) {
     return state.getDistanceToTarget() == 0;
+  }
+
+  //checks if the path is blocked
+  private boolean pathBlocked(GraphNode current) {
+
   }
 
   /**
