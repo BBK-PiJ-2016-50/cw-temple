@@ -6,26 +6,20 @@ import java.util.Collection;
 public class GraphNode {
 
   private long id;
-  private boolean hasBeenVisited = false;
   private Collection<NodeStatus> neighbours;
   private int distanceToOrb;
 
   public GraphNode(final long id,
-                   final boolean hasBeenVisited,
+                   final int distanceToOrb,
                    final Collection<NodeStatus> neighbours,
-                   final int distanceToOrb) {
+                   final boolean hasBeenVisited) {
     this.id = id;
-    this.hasBeenVisited = hasBeenVisited;
     this.neighbours = neighbours;
     this.distanceToOrb = distanceToOrb;
   }
 
   public void setId(final long id) {
     this.id = id;
-  }
-
-  public void setHasBeenVisited(final boolean hasBeenVisited) {
-    this.hasBeenVisited = hasBeenVisited;
   }
 
   public void setNeighbours(final Collection<NodeStatus> neighbours) {
@@ -38,10 +32,6 @@ public class GraphNode {
 
   public long getId() {
     return id;
-  }
-
-  public boolean getHasBeenVisited() {
-    return hasBeenVisited;
   }
 
   public Collection<NodeStatus> getNeighbours() {
