@@ -11,8 +11,7 @@ public class GraphNode {
 
   public GraphNode(final long id,
                    final int distanceToOrb,
-                   final Collection<NodeStatus> neighbours,
-                   final boolean hasBeenVisited) {
+                   final Collection<NodeStatus> neighbours) {
     this.id = id;
     this.neighbours = neighbours;
     this.distanceToOrb = distanceToOrb;

@@ -52,19 +52,18 @@ public class Explorer {
     while (!orbFound(state)) {
 
       //if current node hasn't been visited before then create a new node and add it to the graph
-      if (!searchGraph.getNodesInGraph().contains(state.getCurrentLocation())) {
+      if (searchGraph.getNodesInGraph().contains(state.getCurrentLocation())) {
+        currentNode = searchGraph.findNodeById(state.getCurrentLocation());
+      } else {
         GraphNode newNode = new GraphNode(state.getCurrentLocation(),
                 state.getDistanceToTarget(),
-                state.getNeighbours(),
-                true);
+                state.getNeighbours());
         searchGraph.addNode(newNode);
         currentNode = newNode;
-      } else {
-        currentNode =
       }
 
       //find information about neighbours of current tile state.getNeighbours
-      currentNode.getNeighbours()
+
 
       //make a decision as to which neighbour would be most appropriate to move to using NodeStatus.compareTo()
       //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
@@ -74,8 +73,6 @@ public class Explorer {
       //stack.push operation
       //update current node with node moved to (or could this be done using stack.peek, rather than keeping separate current node variable
     }
-    // executes when distance to target is 0
-    return;
 
   }
 
@@ -83,7 +80,6 @@ public class Explorer {
   private boolean orbFound(ExplorationState state) {
     return state.getDistanceToTarget() == 0;
   }
-
 
   /**
    * Escape from the cavern before the ceiling collapses, trying to collect as much
