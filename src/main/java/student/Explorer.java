@@ -50,42 +50,32 @@ public class Explorer {
     //create a graph. Nodes will be added to graph and connected to each other
     Graph searchGraph = new Graph();
 
-    //create rootNode for graph
-    GraphNode rootNode = new GraphNode(state.getCurrentLocation(),
-                                       state.getDistanceToTarget(),
-                                       state.getNeighbours(),
-                                      true);
-
-    //add root node to the graph
-    searchGraph.setRoot(rootNode);
-
-    //add root node to stack
-    nodeStack.push(rootNode);
-
     //check to see if distance to target is 0.  If yes then orb found and return.  If not continue with search
     while (!orbFound(state)) {
       //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
-      if (pathBlocked(nodeStack.peek(), searchGraph)) {
-        nodeStack.pop();
-      }
-      else {
-        //create new GraphNode with tile id, neighbours and hasBeenVisited information, distance to target (state.distanceToTarget)
-        //add new GraphNode to the graph
 
-        //find information about neighbours of current tile state.getNeighbours
-        //if tile has an edge then keep following the edge if possible for subsequent nodes
-        //make a decision as to which neighbour would be most appropriate to move to using NodeStatus.compareTo()
-
-        //connect current node with node we are moving to (i.e. the parent to the child)
-        //moveTo() tile with id that was determined as the best next option
-        //stack.push operation
-        //update current node with node moved to (or could this be done using stack.peek, rather than keeping separate current node variable?
+      //if current node hasn't been visited before then create a new node and add it to the graph
+      if (!searchGraph.getNodesInGraph().contains(state.getCurrentLocation())) {
+        GraphNode newNode = new GraphNode(state.getCurrentLocation(),
+                state.getDistanceToTarget(),
+                state.getNeighbours(),
+                true);
+        searchGraph.addNode(newNode);
       }
 
-      // executes when distance to target is 0
-      return;
+      //find information about neighbours of current tile state.getNeighbours
 
+
+      //if tile has an edge then keep following the edge if possible for subsequent nodes
+      //make a decision as to which neighbour would be most appropriate to move to using NodeStatus.compareTo()
+
+      //connect current node with node we are moving to (i.e. the parent to the child)
+      //moveTo() tile with id that was determined as the best next option
+      //stack.push operation
+      //update current node with node moved to (or could this be done using stack.peek, rather than keeping separate current node variable
     }
+    // executes when distance to target is 0
+    return;
 
   }
 
@@ -94,19 +84,6 @@ public class Explorer {
     return state.getDistanceToTarget() == 0;
   }
 
-  //checks if the path is blocked
-  //does this by looking at if neighbouring tiles is 1, and if it is then has this tile been visited before
-  private boolean pathBlocked(GraphNode current, Graph graph) {
-    if (current.getNeighbours().size() == 1) {
-      NodeStatus previousNode = current.getNeighbours().iterator().next();
-      for (GraphNode node : graph.getNodesInGraph()) {
-        if (node.getId() == previousNode.getId()) {
-          return node.getHasBeenVisited();
-        }
-      }
-    }
-    return false;
-  }
 
   /**
    * Escape from the cavern before the ceiling collapses, trying to collect as much
