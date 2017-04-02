@@ -5,7 +5,8 @@ import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
 
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
 public class Explorer {
@@ -48,25 +49,36 @@ public class Explorer {
     Graph searchGraph = new Graph();
     GraphNode currentNode;
 
-    //check to see if distance to target is 0
     while (!orbFound(state)) {
 
       //if current node hasn't been visited before then create a new node and add it to the graph
-      if (searchGraph.getNodesInGraph().contains(state.getCurrentLocation())) {
-        currentNode = searchGraph.findNodeById(state.getCurrentLocation());
+      GraphNode tileNode = searchGraph.findNodeById(state.getCurrentLocation());
+      if (searchGraph.getNodesInGraph().contains(tileNode)) {
+        currentNode = tileNode;
+        nodeStack.push(tileNode);
       } else {
         GraphNode newNode = new GraphNode(state.getCurrentLocation(),
                 state.getDistanceToTarget(),
                 state.getNeighbours());
         searchGraph.addNode(newNode);
         currentNode = newNode;
+        nodeStack.push(newNode);
       }
 
-      //find information about neighbours of current tile state.getNeighbours
-
-
-      //make a decision as to which neighbour would be most appropriate to move to using NodeStatus.compareTo()
-      //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
+      //find information about neighbours of current tile
+      List<NodeStatus> unvisitedNeighbours = searchGraph.getUnvisitedNeighbours(currentNode);
+      if (!unvisitedNeighbours.isEmpty()) {
+        //make a decision as to which neighbour would be most appropriate to move to
+        GraphNode closestNode = currentNode;
+        for (NodeStatus neighbour : unvisitedNeighbours) {
+          if (neighbour.getDistanceToTarget() < closestNode.getDistanceToOrb()) {
+            closestNode = searchGraph.findNodeById(neighbour.getId());
+          }
+        }
+      } else {
+        //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
+        System.out.println("placeholder");
+      }
 
       //connect current node with node we are moving to (i.e. the parent to the child)
       //moveTo() tile with id that was determined as the best next option
