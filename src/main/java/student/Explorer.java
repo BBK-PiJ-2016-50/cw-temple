@@ -5,6 +5,8 @@ import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
 
+import java.util.Comparator;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -42,16 +44,33 @@ public class Explorer {
    * @param state the information available at the current state
    */
   public void explore(ExplorationState state) {
-    //note that the state object automatically updates after making a move
-    //depth first search - best to use in conjunction with distance of tiles from orb
 
     Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of nodes that have been visited
     Graph searchGraph = new Graph();
     GraphNode currentNode;
 
+    //create root node and add to graph and stack
+    GraphNode rootNode = new GraphNode(state.getCurrentLocation(),
+            state.getDistanceToTarget());
+    currentNode = rootNode;
+    searchGraph.addNode(rootNode);
+    nodeStack.push(rootNode);
+
     while (!orbFound(state)) {
 
-      //if current node hasn't been visited before then create a new node and add it to the graph
+      //add and connect currentNode's neighbours if they haven't already been added/connected
+      Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
+      for (NodeStatus neighbour : currentNodeNeighbours) {
+        if (!searchGraph.idExists(neighbour.getId())) {
+          GraphNode newNode = new GraphNode(neighbour.getId(),
+                  neighbour.getDistanceToTarget());
+          searchGraph.connectNode(currentNode, newNode);
+        }
+      }
+
+
+      //if current node has been visited before then assign to currentNode and add to stack
+      // if not visited before then create a new node and add it to the graph, add to stack and assign to currentNode
       GraphNode tileNode = searchGraph.findNodeById(state.getCurrentLocation());
       if (searchGraph.getNodesInGraph().contains(tileNode)) {
         currentNode = tileNode;
@@ -67,23 +86,20 @@ public class Explorer {
 
       //find information about neighbours of current tile
       List<NodeStatus> unvisitedNeighbours = searchGraph.getUnvisitedNeighbours(currentNode);
+      //see if the node has any unvisited neighbours
       if (!unvisitedNeighbours.isEmpty()) {
-        //make a decision as to which neighbour would be most appropriate to move to
-        GraphNode closestNode = currentNode;
-        for (NodeStatus neighbour : unvisitedNeighbours) {
-          if (neighbour.getDistanceToTarget() < closestNode.getDistanceToOrb()) {
-            closestNode = searchGraph.findNodeById(neighbour.getId());
-          }
-        }
+        //if yes make a decision as to which neighbour would be most appropriate to move to
+        unvisitedNeighbours.sort(Comparator.comparing(NodeStatus::getDistanceToTarget));
+        NodeStatus closestTileToOrb = unvisitedNeighbours.get(0);
+        //moveTo() tile with id that was determined as the best next option
+        state.moveTo(closestTileToOrb.getId());
       } else {
         //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
         System.out.println("placeholder");
       }
 
       //connect current node with node we are moving to (i.e. the parent to the child)
-      //moveTo() tile with id that was determined as the best next option
-      //stack.push operation
-      //update current node with node moved to (or could this be done using stack.peek, rather than keeping separate current node variable
+      searchGraph.connectNode(currentNode, closestNodeToOrb);
     }
 
   }

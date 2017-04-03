@@ -37,17 +37,31 @@ public class Graph {
     return null;
   }
 
+  public boolean idExists(long id) {
+    boolean exists = false;
+    for (GraphNode node : nodesInGraph) {
+      if (node.getId() == id) {
+        exists = true;
+      }
+    }
+    return exists;
+  }
+
   public List<NodeStatus> getUnvisitedNeighbours(GraphNode node) {
     List<NodeStatus> unvisitedNeighbours  = new ArrayList<>();
-    for (NodeStatus neighbour : node.getNeighbours()) {
-      boolean connected = false;
-      for (GraphNode visited : nodeConnections.get(node)) {
-        if (neighbour.getId() == visited.getId()) {
-          connected = true;
+    if (!nodeConnections.containsKey(node)) { //to handle nodes which don't yet exist in nodeconnections
+      unvisitedNeighbours.addAll(node.getNeighbours());
+    } else {
+      for (NodeStatus neighbour : node.getNeighbours()) {
+        boolean connected = false;
+        for (GraphNode visited : nodeConnections.get(node)) {
+          if (neighbour.getId() == visited.getId()) {
+            connected = true;
+          }
         }
-      }
-      if (!connected) {
-        unvisitedNeighbours.add(neighbour);
+        if (!connected) {
+          unvisitedNeighbours.add(neighbour);
+        }
       }
     }
     return unvisitedNeighbours;
