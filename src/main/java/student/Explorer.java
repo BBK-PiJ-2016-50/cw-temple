@@ -44,6 +44,7 @@ public class Explorer {
    * @param state the information available at the current state
    */
   public void explore(ExplorationState state) {
+    //can currentNode be replaced by nodeStack.peek?
 
     Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of nodes that have been visited
     Graph searchGraph = new Graph();
@@ -51,7 +52,8 @@ public class Explorer {
 
     //create root node and add to graph and stack
     GraphNode rootNode = new GraphNode(state.getCurrentLocation(),
-            state.getDistanceToTarget());
+            state.getDistanceToTarget(),
+            true);
     currentNode = rootNode;
     searchGraph.addNode(rootNode);
     nodeStack.push(rootNode);
@@ -63,43 +65,30 @@ public class Explorer {
       for (NodeStatus neighbour : currentNodeNeighbours) {
         if (!searchGraph.idExists(neighbour.getId())) {
           GraphNode newNode = new GraphNode(neighbour.getId(),
-                  neighbour.getDistanceToTarget());
+                  neighbour.getDistanceToTarget(),
+                  false);
           searchGraph.connectNode(currentNode, newNode);
         }
       }
 
+      //find neighbour nodes that haven't been visited
+      List<GraphNode> unvisitedNeighbours = searchGraph.getUnvisitedNeighbours(currentNode);
 
-      //if current node has been visited before then assign to currentNode and add to stack
-      // if not visited before then create a new node and add it to the graph, add to stack and assign to currentNode
-      GraphNode tileNode = searchGraph.findNodeById(state.getCurrentLocation());
-      if (searchGraph.getNodesInGraph().contains(tileNode)) {
-        currentNode = tileNode;
-        nodeStack.push(tileNode);
+      if (unvisitedNeighbours.isEmpty()) {
+        //if all neighbours visited then stack.pop until you get to a node that has unvisited neighbours
+        nodeStack.pop();
+        currentNode = nodeStack.peek();
       } else {
-        GraphNode newNode = new GraphNode(state.getCurrentLocation(),
-                state.getDistanceToTarget(),
-                state.getNeighbours());
-        searchGraph.addNode(newNode);
-        currentNode = newNode;
-        nodeStack.push(newNode);
+        //find closest unvisited node to orb
+        GraphNode closestNodeToOrb = searchGraph.getClosestNode(unvisitedNeighbours);
+        //move to this unvisited neighbour
+        state.moveTo(closestNodeToOrb.getId());
+        //update status
+        closestNodeToOrb.setHasBeenVisited(true);
+        nodeStack.push(closestNodeToOrb);
+        currentNode = closestNodeToOrb;
       }
 
-      //find information about neighbours of current tile
-      List<NodeStatus> unvisitedNeighbours = searchGraph.getUnvisitedNeighbours(currentNode);
-      //see if the node has any unvisited neighbours
-      if (!unvisitedNeighbours.isEmpty()) {
-        //if yes make a decision as to which neighbour would be most appropriate to move to
-        unvisitedNeighbours.sort(Comparator.comparing(NodeStatus::getDistanceToTarget));
-        NodeStatus closestTileToOrb = unvisitedNeighbours.get(0);
-        //moveTo() tile with id that was determined as the best next option
-        state.moveTo(closestTileToOrb.getId());
-      } else {
-        //if dead-end then stack.pop until you get to a node that has neighbours which haven't been visited yet
-        System.out.println("placeholder");
-      }
-
-      //connect current node with node we are moving to (i.e. the parent to the child)
-      searchGraph.connectNode(currentNode, closestNodeToOrb);
     }
 
   }

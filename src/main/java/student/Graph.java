@@ -1,9 +1,6 @@
 package student;
 
-import game.NodeStatus;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Graph {
@@ -38,33 +35,31 @@ public class Graph {
   }
 
   public boolean idExists(long id) {
-    boolean exists = false;
     for (GraphNode node : nodesInGraph) {
       if (node.getId() == id) {
-        exists = true;
+        return true;
       }
     }
-    return exists;
+    return false;
   }
 
-  public List<NodeStatus> getUnvisitedNeighbours(GraphNode node) {
-    List<NodeStatus> unvisitedNeighbours  = new ArrayList<>();
-    if (!nodeConnections.containsKey(node)) { //to handle nodes which don't yet exist in nodeconnections
-      unvisitedNeighbours.addAll(node.getNeighbours());
-    } else {
-      for (NodeStatus neighbour : node.getNeighbours()) {
-        boolean connected = false;
-        for (GraphNode visited : nodeConnections.get(node)) {
-          if (neighbour.getId() == visited.getId()) {
-            connected = true;
-          }
-        }
-        if (!connected) {
-          unvisitedNeighbours.add(neighbour);
-        }
+  //could replace with stream and lambda stuff
+  public List<GraphNode> getUnvisitedNeighbours(GraphNode node) {
+    List<GraphNode> unvisitedNeighbours = new ArrayList<>();
+    List<GraphNode> neighbourNodes = nodeConnections.get(node);
+    for (GraphNode neighbour : neighbourNodes) {
+      if (!neighbour.getHasBeenVisited()) {
+        unvisitedNeighbours.add(neighbour);
       }
     }
     return unvisitedNeighbours;
+  }
+
+  public GraphNode getClosestNode(List<GraphNode> unvisitedNeighbours) {
+    Optional<GraphNode> minVal = unvisitedNeighbours
+            .stream()
+            .min(Comparator.comparing(GraphNode::getDistanceToOrb));
+    return minVal.isPresent() ? minVal.get() : null;
   }
 
 }
