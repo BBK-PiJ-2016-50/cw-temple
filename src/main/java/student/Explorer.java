@@ -2,12 +2,9 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import game.Node;
 import game.NodeStatus;
 
-import java.util.Comparator;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -48,15 +45,15 @@ public class Explorer {
 
     Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of nodes that have been visited
     Graph searchGraph = new Graph();
-    GraphNode currentNode;
-
     //create root node and add to graph and stack
-    GraphNode rootNode = new GraphNode(state.getCurrentLocation(),
+    GraphNode currentNode = new GraphNode(state.getCurrentLocation(),
             state.getDistanceToTarget(),
             true);
-    currentNode = rootNode;
-    searchGraph.addNode(rootNode);
-    nodeStack.push(rootNode);
+    searchGraph.addNode(currentNode);
+    nodeStack.push(currentNode);
+
+    //System.out.println(currentNode.getId());
+    //System.out.println(nodeStack.size());
 
     while (!orbFound(state)) {
 
@@ -64,6 +61,7 @@ public class Explorer {
       Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
       for (NodeStatus neighbour : currentNodeNeighbours) {
         if (!searchGraph.idExists(neighbour.getId())) {
+          //System.out.println(neighbour.getId());
           GraphNode newNode = new GraphNode(neighbour.getId(),
                   neighbour.getDistanceToTarget(),
                   false);
@@ -73,9 +71,11 @@ public class Explorer {
 
       //find neighbour nodes that haven't been visited
       List<GraphNode> unvisitedNeighbours = searchGraph.getUnvisitedNeighbours(currentNode);
+      System.out.println(unvisitedNeighbours.isEmpty());
 
       if (unvisitedNeighbours.isEmpty()) {
         //if all neighbours visited then stack.pop until you get to a node that has unvisited neighbours
+        System.out.println("empty");
         nodeStack.pop();
         currentNode = nodeStack.peek();
       } else {

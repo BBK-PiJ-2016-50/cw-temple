@@ -14,14 +14,6 @@ public class GraphNode {
     this.hasBeenVisited = hasBeenVisited;
   }
 
-  public void setId(final long id) {
-    this.id = id;
-  }
-
-  public void setDistanceToOrb(final int distanceToOrb) {
-    this.distanceToOrb = distanceToOrb;
-  }
-
   public void setHasBeenVisited(final boolean hasBeenVisited) {
     this.hasBeenVisited = hasBeenVisited;
   }
