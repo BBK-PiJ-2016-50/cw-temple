@@ -71,12 +71,12 @@ public class Explorer {
 
       //find neighbour nodes that haven't been visited
       List<GraphNode> unvisitedNeighbours = searchGraph.getUnvisitedNeighbours(currentNode);
-      System.out.println(unvisitedNeighbours.isEmpty());
 
       if (unvisitedNeighbours.isEmpty()) {
         //if all neighbours visited then stack.pop until you get to a node that has unvisited neighbours
         System.out.println("empty");
         nodeStack.pop();
+        state.moveTo(nodeStack.peek().getId());
         currentNode = nodeStack.peek();
       } else {
         //find closest unvisited node to orb
