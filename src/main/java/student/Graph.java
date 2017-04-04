@@ -25,19 +25,6 @@ public class Graph {
     listOfChildNodes.add(child);
   }
 
-  public List<GraphNode> getNodesInGraph() {
-    return nodesInGraph;
-  }
-
-  public GraphNode findNodeById(long id) {
-    for (GraphNode node : nodesInGraph) {
-      if (node.getId() == id) {
-        return node;
-      }
-    }
-    return null;
-  }
-
   public boolean idExists(long id) {
     for (GraphNode node : nodesInGraph) {
       if (node.getId() == id) {
