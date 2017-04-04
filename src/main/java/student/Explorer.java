@@ -2,11 +2,10 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import game.Node;
 import game.NodeStatus;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Explorer {
 
@@ -42,13 +41,13 @@ public class Explorer {
    */
   public void explore(ExplorationState state) {
 
-    Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of nodes that have been visited
-    Graph searchGraph = new Graph();
+    Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of graph nodes that have been visited
+    Graph exploreGraph = new Graph();
     //create root node and add to graph and stack
     GraphNode currentNode = new GraphNode(state.getCurrentLocation(),
             state.getDistanceToTarget(),
             true);
-    searchGraph.addNode(currentNode);
+    exploreGraph.addNode(currentNode);
     nodeStack.push(currentNode);
 
     while (!orbFound(state)) {
@@ -58,17 +57,17 @@ public class Explorer {
       //add and connect currentNode's neighbours if they haven't already been added/connected
       Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
       for (NodeStatus neighbour : currentNodeNeighbours) {
-        if (!searchGraph.idExists(neighbour.getId())) {
+        if (!exploreGraph.idExists(neighbour.getId())) {
           GraphNode newNode = new GraphNode(neighbour.getId(),
                   neighbour.getDistanceToTarget(),
                   false);
-          searchGraph.addNode(newNode);
-          searchGraph.connectNode(currentNode, newNode);
+          exploreGraph.addNode(newNode);
+          exploreGraph.connectNode(currentNode, newNode);
         }
       }
 
       //find neighbour nodes that haven't been visited
-      List<GraphNode> unvisitedNeighbours = searchGraph.getUnvisitedNeighbours(currentNode);
+      List<GraphNode> unvisitedNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
 
       if (unvisitedNeighbours.isEmpty()) {
         //if all neighbours visited then stack.pop until you get to a node that has unvisited neighbours
@@ -77,7 +76,7 @@ public class Explorer {
         currentNode = nodeStack.peek();
       } else {
         //find closest unvisited node to orb
-        GraphNode closestNodeToOrb = searchGraph.getClosestNode(unvisitedNeighbours);
+        GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvisitedNeighbours);
         //move to this unvisited neighbour
         state.moveTo(closestNodeToOrb.getId());
         //update status
@@ -121,22 +120,51 @@ public class Explorer {
    */
   public void escape(EscapeState state) {
 
-    //call the state.getTimeRemaining method to see how many steps can be used
-    //rootNode = state.getCurrentNode
-    //get all nodes in the graph by calling state.getVertices
     //create a new graph object
-    //build a massive map using graph.connectNode
+    Graph escapeGraph = new Graph();
+
+    //create a queue which will be populated by the selected route
+    Queue<GraphNode> nodeQueue = new LinkedList<>();
+
+    //create and add root node to graph.  This is the explorers starting position
+    GraphNode rootNode = new GraphNode(state.getCurrentNode().getId(),
+            false,
+            state.getCurrentNode().getTile().getOriginalGold());
+    escapeGraph.addNode(rootNode);
+
+    //build the entire map
+    for (Node mapNode : state.getVertices()) {
+      //if not in graph.nodesInGraph then add to graph
+      if (!escapeGraph.idExists(mapNode.getId())) {
+        GraphNode newNode = new GraphNode(mapNode.getId(),
+                false,
+                mapNode.getTile().getOriginalGold());
+        escapeGraph.addNode(newNode);
+        for (Node neighbour : mapNode.getNeighbours()) {
+          if (!escapeGraph.idExists(neighbour.getId())) {
+            GraphNode newNeighbourNode = new GraphNode(neighbour.getId(),
+                    false,
+                    neighbour.getTile().getOriginalGold());
+            escapeGraph.addNode(newNeighbourNode);
+            escapeGraph.connectNode(newNode, newNeighbourNode);
+          }
+        }
+      }
+    }
+
+    
+
+    //call the state.getTimeRemaining method to see how many steps can be used
     //get all routes in tree that start from currentNode and end at getExit node and compare
     //then look at route which get most gold, steer clear of worst edges and get back within time.
     //nodes have .getEdge method which can be used to get the edge weight
-    //use this queue to to pop off the next tile to moveTo
 
     while (!exitFound(state)) {
 
       //when moving to node check its hasGold status.
       //if yes then check its goldCollected status.
       //if no then state.pickUpGold
-      //moveTo next node in queue
+      //moveTo next node in queue using queue.pop
 
     }
 
