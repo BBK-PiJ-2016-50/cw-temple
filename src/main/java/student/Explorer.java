@@ -41,7 +41,6 @@ public class Explorer {
    * @param state the information available at the current state
    */
   public void explore(ExplorationState state) {
-    //can currentNode be replaced by nodeStack.peek?
 
     Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of nodes that have been visited
     Graph searchGraph = new Graph();
@@ -51,9 +50,6 @@ public class Explorer {
             true);
     searchGraph.addNode(currentNode);
     nodeStack.push(currentNode);
-
-    //System.out.println(currentNode.getId());
-    //System.out.println(nodeStack.size());
 
     while (!orbFound(state)) {
 
@@ -65,6 +61,7 @@ public class Explorer {
           GraphNode newNode = new GraphNode(neighbour.getId(),
                   neighbour.getDistanceToTarget(),
                   false);
+          searchGraph.addNode(newNode);
           searchGraph.connectNode(currentNode, newNode);
         }
       }
@@ -74,7 +71,6 @@ public class Explorer {
 
       if (unvisitedNeighbours.isEmpty()) {
         //if all neighbours visited then stack.pop until you get to a node that has unvisited neighbours
-        System.out.println("empty");
         nodeStack.pop();
         state.moveTo(nodeStack.peek().getId());
         currentNode = nodeStack.peek();
