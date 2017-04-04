@@ -64,6 +64,7 @@ public class Explorer {
           exploreGraph.addNode(newNode);
           exploreGraph.connectNode(currentNode, newNode);
         }
+        //do i need to add an else statement here which connects the parent to neighbours which already exist as nodes?
       }
 
       //find neighbour nodes that haven't been visited
@@ -126,32 +127,7 @@ public class Explorer {
     //create a queue which will be populated by the selected route
     Queue<GraphNode> nodeQueue = new LinkedList<>();
 
-    //create and add root node to graph.  This is the explorers starting position
-    GraphNode rootNode = new GraphNode(state.getCurrentNode().getId(),
-            false,
-            state.getCurrentNode().getTile().getOriginalGold());
-    escapeGraph.addNode(rootNode);
-
-    //build the entire map
-    for (Node mapNode : state.getVertices()) {
-      //if not in graph.nodesInGraph then add to graph
-      if (!escapeGraph.idExists(mapNode.getId())) {
-        GraphNode newNode = new GraphNode(mapNode.getId(),
-                false,
-                mapNode.getTile().getOriginalGold());
-        escapeGraph.addNode(newNode);
-        for (Node neighbour : mapNode.getNeighbours()) {
-          if (!escapeGraph.idExists(neighbour.getId())) {
-            GraphNode newNeighbourNode = new GraphNode(neighbour.getId(),
-                    false,
-                    neighbour.getTile().getOriginalGold());
-            escapeGraph.addNode(newNeighbourNode);
-            escapeGraph.connectNode(newNode, newNeighbourNode);
-          }
-        }
-      }
-    }
-
+    //use Dijkstra algorithm to solve problem of shortest distance between two points
     
 
     //call the state.getTimeRemaining method to see how many steps can be used

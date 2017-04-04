@@ -1,14 +1,11 @@
 package student;
 
-
-//used for both explore and escape phase.  Different constructors provided for each
 public class GraphNode {
 
   private long id;
-  private int distanceToOrb; //explore phase only
-  private boolean hasBeenVisited; //explore phase only
+  private int distanceToOrb;
+  private boolean hasBeenVisited;
 
-  //explore phase constructor
   public GraphNode(final long id,
                    final int distanceToOrb,
                    final boolean hasBeenVisited) {
@@ -17,7 +14,6 @@ public class GraphNode {
     this.hasBeenVisited = hasBeenVisited;
   }
 
-  //explore phase only
   public void setHasBeenVisited(final boolean hasBeenVisited) {
     this.hasBeenVisited = hasBeenVisited;
   }
@@ -26,12 +22,10 @@ public class GraphNode {
     return id;
   }
 
-  //explore phase only
   public int getDistanceToOrb() {
     return distanceToOrb;
   }
 
-  //explore phase only
   public boolean getHasBeenVisited() {
     return hasBeenVisited;
   }
