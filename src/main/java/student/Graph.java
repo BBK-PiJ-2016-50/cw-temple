@@ -47,10 +47,13 @@ public class Graph {
   }
 
   public GraphNode getClosestNode(List<GraphNode> unvisitedNeighbours) {
-    Optional<GraphNode> minVal = unvisitedNeighbours
-            .stream()
-            .min(Comparator.comparing(GraphNode::getDistanceToOrb));
-    return minVal.isPresent() ? minVal.get() : null;
+    GraphNode closestNode = unvisitedNeighbours.iterator().next();
+    for (GraphNode neighbour : unvisitedNeighbours) {
+      if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
+        closestNode = neighbour;
+      }
+    }
+    return closestNode;
   }
 
 }
