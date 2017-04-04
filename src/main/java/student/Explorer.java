@@ -2,7 +2,6 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import game.Node;
 import game.NodeStatus;
 
 import java.util.*;
@@ -121,19 +120,14 @@ public class Explorer {
    */
   public void escape(EscapeState state) {
 
-    //create a new graph object
-    Graph escapeGraph = new Graph();
-
-    //create a queue which will be populated by the selected route
-    Queue<GraphNode> nodeQueue = new LinkedList<>();
-
     //use Dijkstra algorithm to solve problem of shortest distance between two points
-    
+    //http://www.vogella.com/tutorials/JavaAlgorithmsDijkstra/article.html
+    //returns a shortest path, convert this to a queue and then use this in the while loop
+
+
 
     //call the state.getTimeRemaining method to see how many steps can be used
-    //get all routes in tree that start from currentNode and end at getExit node and compare
-    //then look at route which get most gold, steer clear of worst edges and get back within time.
-    //nodes have .getEdge method which can be used to get the edge weight
+    //then optimise to get route which gets most gold, steers clear of worst edges and gets back within time.
 
     while (!exitFound(state)) {
 
