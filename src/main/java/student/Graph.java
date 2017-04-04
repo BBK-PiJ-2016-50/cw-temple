@@ -36,9 +36,11 @@ public class Graph {
   public List<GraphNode> getUnvisitedNeighbours(GraphNode node) {
     List<GraphNode> unvisitedNeighbours = new ArrayList<>();
     List<GraphNode> neighbourNodes = nodeConnections.get(node);
-    for (GraphNode neighbour : neighbourNodes) {
-      if (!neighbour.getHasBeenVisited()) {
-        unvisitedNeighbours.add(neighbour);
+    if (neighbourNodes != null) {
+      for (GraphNode neighbour : neighbourNodes) {
+        if (!neighbour.getHasBeenVisited()) {
+          unvisitedNeighbours.add(neighbour);
+        }
       }
     }
     return unvisitedNeighbours;

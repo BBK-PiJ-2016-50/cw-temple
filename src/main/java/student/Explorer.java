@@ -53,6 +53,8 @@ public class Explorer {
 
     while (!orbFound(state)) {
 
+      //System.out.println(state.getCurrentLocation());
+
       //add and connect currentNode's neighbours if they haven't already been added/connected
       Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
       for (NodeStatus neighbour : currentNodeNeighbours) {
