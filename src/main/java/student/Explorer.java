@@ -59,7 +59,6 @@ public class Explorer {
       Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
       for (NodeStatus neighbour : currentNodeNeighbours) {
         if (!searchGraph.idExists(neighbour.getId())) {
-          //System.out.println(neighbour.getId());
           GraphNode newNode = new GraphNode(neighbour.getId(),
                   neighbour.getDistanceToTarget(),
                   false);
@@ -121,6 +120,31 @@ public class Explorer {
    * @param state the information available at the current state
    */
   public void escape(EscapeState state) {
-    //TODO: Escape from the cavern before time runs out
+
+    //call the state.getTimeRemaining method to see how many steps can be used
+    //rootNode = state.getCurrentNode
+    //get all nodes in the graph by calling state.getVertices
+    //create a new graph object
+    //build a massive map using graph.connectNode
+    //get all routes in tree that start from currentNode and end at getExit node and compare
+    //then look at route which get most gold, steer clear of worst edges and get back within time.
+    //nodes have .getEdge method which can be used to get the edge weight
+    //use this queue to to pop off the next tile to moveTo
+
+    while (!exitFound(state)) {
+
+      //when moving to node check its hasGold status.
+      //if yes then check its goldCollected status.
+      //if no then state.pickUpGold
+      //moveTo next node in queue
+
+    }
+
   }
+
+  //checks to see if exit found.  Exit is found if node is not equal to getExit
+  private boolean exitFound(EscapeState state) {
+    return state.getExit() == state.getCurrentNode();
+  }
+
 }
