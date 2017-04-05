@@ -127,20 +127,21 @@ public class Explorer {
 
     EscapeRoute escapeRoute = new EscapeRoute();
     escapeRoute.findRoute(state.getCurrentNode());
-    Queue<Node> pathToTake = new LinkedList<>(escapeRoute.getPath(state.getExit()));
+    Queue<Node> pathToTake = new LinkedList<>(escapeRoute.getRoute(state.getExit()));
 
     //call the state.getTimeRemaining method to see how many steps can be used
 
     pathToTake.remove();  // ensures the explorer moves from the start position
     while (!exitFound(state)) {
 
-      state.moveTo(pathToTake.remove());
+      Node routeNode = pathToTake.remove();
+      state.moveTo(routeNode);
+      if (routeNode.getTile().getGold() > 0) {
+        state.pickUpGold();
+      }
 
-      //then optimise to get route which gets most gold, steers clear of worst edges and gets back within time.
-      //when moving to node check its hasGold status.
-      //if yes then check its goldCollected status.
-      //if no then state.pickUpGold
-      //moveTo next node in queue using queue.pop
+      //then optimise to get route which gets most gold gets back within time.
+
 
     }
 
