@@ -128,11 +128,13 @@ public class Explorer {
     EscapeRoute escapeRoute = new EscapeRoute();
     escapeRoute.findRoute(state.getCurrentNode());
     Queue<Node> pathToTake = new LinkedList<>(escapeRoute.getRoute(state.getExit()));
+    int totalTime = state.getTimeRemaining();
 
-    //call the state.getTimeRemaining method to see how many steps can be used
 
     pathToTake.remove();  // ensures the explorer moves from the start position
     while (!exitFound(state)) {
+
+
 
       Node routeNode = pathToTake.remove();
       state.moveTo(routeNode);
@@ -140,11 +142,26 @@ public class Explorer {
         state.pickUpGold();
       }
 
-      //then optimise to get route which gets most gold gets back within time.
+      //optimise to get route which gets most gold gets back within time
+      //while (state.getTimeRemaining() > (totalTime / 4)) {
+      for (Node neighbour : routeNode.getNeighbours()) {
+        Stack<Node> goldTrail = new Stack<>();
+        goldTrail.push(routeNode);
+        Node current = neighbour;
+        while (current.getTile().getGold() > 0) {
+          state.moveTo(current);
+          state.pickUpGold();
+          goldTrail.push(current);
+          current = current.getNeighbours().iterator().next();
+        }
 
-
+        goldTrail.pop();
+        while (!goldTrail.isEmpty()) {
+          state.moveTo(goldTrail.pop());
+        }
+      }
+      //}
     }
-
   }
 
   //checks to see if exit found.  Exit is found if node is not equal to getExit
