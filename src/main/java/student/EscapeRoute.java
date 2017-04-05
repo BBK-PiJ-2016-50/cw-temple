@@ -48,6 +48,7 @@ public class EscapeRoute {
     }
   }
 
+  //method to find the shortest distance
   private int getShortestDistance(Node target) {
     Integer dist = distanceToNode.get(target);
     if (dist == null) {
@@ -57,17 +58,17 @@ public class EscapeRoute {
     }
   }
 
-  public List<Node> getPath(Node endNode) {
-    List<Node> path = new LinkedList<>();
+  public List<Node> getRoute(Node endNode) {
+    List<Node> route = new LinkedList<>();
     Node nextNode = endNode;
-    path.add(nextNode);
+    route.add(nextNode);
     while (pathNodes.get(nextNode) != null) {
       nextNode = pathNodes.get(nextNode);
-      path.add(nextNode);
+      route.add(nextNode);
     }
     //ensure the path is returned with the start node first
-    Collections.reverse(path);
-    return path;
+    Collections.reverse(route);
+    return route;
   }
 
 }

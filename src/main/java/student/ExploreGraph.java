@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Graph {
+public class ExploreGraph {
 
   private final List<GraphNode> nodesInGraph = new ArrayList<>();
   private final Map<GraphNode, List<GraphNode>> nodeConnections = new ConcurrentHashMap<>();

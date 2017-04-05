@@ -42,7 +42,7 @@ public class Explorer {
   public void explore(ExplorationState state) {
 
     Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of graph nodes that have been visited
-    Graph exploreGraph = new Graph();
+    ExploreGraph exploreGraph = new ExploreGraph();
     //create root node and add to graph and stack
     GraphNode currentNode = new GraphNode(state.getCurrentLocation(),
             state.getDistanceToTarget(),
@@ -133,8 +133,6 @@ public class Explorer {
 
     pathToTake.remove();  // ensures the explorer moves from the start position
     while (!exitFound(state)) {
-
-
 
       Node routeNode = pathToTake.remove();
       state.moveTo(routeNode);
