@@ -1,6 +1,5 @@
 package student;
 
-import game.Edge;
 import game.EscapeState;
 import game.ExplorationState;
 import game.NodeStatus;
@@ -126,16 +125,18 @@ public class Explorer {
     //http://www.vogella.com/tutorials/JavaAlgorithmsDijkstra/article.html
     //returns a shortest path, convert this to a queue and then use this in the while loop
 
-    Collection<Node> nodes = state.getVertices();
-    EscapeRoute escapeRoute = new EscapeRoute(nodes);
-    escapeRoute.execute(state.getCurrentNode());
-    Queue<Nodes> pathToTake = escapeRoute.getPath(state.getExit());
+    EscapeRoute escapeRoute = new EscapeRoute();
+    escapeRoute.findRoute(state.getCurrentNode());
+    Queue<Node> pathToTake = new LinkedList<>(escapeRoute.getPath(state.getExit()));
 
     //call the state.getTimeRemaining method to see how many steps can be used
-    //then optimise to get route which gets most gold, steers clear of worst edges and gets back within time.
 
+    pathToTake.remove();  // ensures the explorer moves from the start position
     while (!exitFound(state)) {
 
+      state.moveTo(pathToTake.remove());
+
+      //then optimise to get route which gets most gold, steers clear of worst edges and gets back within time.
       //when moving to node check its hasGold status.
       //if yes then check its goldCollected status.
       //if no then state.pickUpGold
