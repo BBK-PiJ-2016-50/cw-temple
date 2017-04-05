@@ -141,24 +141,23 @@ public class Explorer {
       }
 
       //optimise to get route which gets most gold gets back within time
-      //while (state.getTimeRemaining() > (totalTime / 4)) {
-      for (Node neighbour : routeNode.getNeighbours()) {
-        Stack<Node> goldTrail = new Stack<>();
-        goldTrail.push(routeNode);
-        Node current = neighbour;
-        while (current.getTile().getGold() > 0) {
-          state.moveTo(current);
-          state.pickUpGold();
-          goldTrail.push(current);
-          current = current.getNeighbours().iterator().next();
-        }
-
-        goldTrail.pop();
-        while (!goldTrail.isEmpty()) {
-          state.moveTo(goldTrail.pop());
+      if (state.getTimeRemaining() > (totalTime / 1.5)) {   //covert magic number to constant variable
+        for (Node neighbour : routeNode.getNeighbours()) {
+          Stack<Node> goldTrail = new Stack<>();
+          goldTrail.push(routeNode);
+          Node current = neighbour;
+          while (current.getTile().getGold() > 0) {
+            state.moveTo(current);
+            state.pickUpGold();
+            goldTrail.push(current);
+            current = current.getNeighbours().iterator().next();
+          }
+          goldTrail.pop();
+          while (!goldTrail.isEmpty()) {
+            state.moveTo(goldTrail.pop());
+          }
         }
       }
-      //}
     }
   }
 
