@@ -86,7 +86,7 @@ public class ExploreGraph {
    * @return the unvisited neighbour node that is closest to the orb
    */
   public GraphNode getClosestNode(final List<GraphNode> unvisitedNeighbours) {
-    //grab any unvisited node and compare each of them to it
+    //grab any unvisited node and compare the rest of them to it
     GraphNode closestNode = unvisitedNeighbours.iterator().next();
     for (GraphNode neighbour : unvisitedNeighbours) {
       if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
