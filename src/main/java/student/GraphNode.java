@@ -31,7 +31,7 @@ class GraphNode {
    * @param distanceToOrb the distance the node is from the orb.
    * @param hasBeenVisited indicates whether the node has been visited before or not.
    */
-  GraphNode(final long id,
+  public GraphNode(final long id,
                    final int distanceToOrb,
                    final boolean hasBeenVisited) {
     this.id = id;
@@ -43,7 +43,7 @@ class GraphNode {
    * sets the hasBeenVisited flag to true or false.
    * @param hasBeenVisited the new value for the hasBeenVisited flag.
    */
-  void setHasBeenVisited(final boolean hasBeenVisited) {
+  public void setHasBeenVisited(final boolean hasBeenVisited) {
     this.hasBeenVisited = hasBeenVisited;
   }
 
@@ -51,7 +51,7 @@ class GraphNode {
    * returns the node's id.
    * @return the id value for the node.
    */
-  long getId() {
+  public long getId() {
     return id;
   }
 
@@ -59,7 +59,7 @@ class GraphNode {
    * returns the distance between the node and the orb.
    * @return the distanceToOrb value.
    */
-  int getDistanceToOrb() {
+  public int getDistanceToOrb() {
     return distanceToOrb;
   }
 
@@ -67,7 +67,7 @@ class GraphNode {
    * indicates whether the node has been visited before or not.
    * @return boolean value stating whether node has been visited or not.
    */
-  boolean getHasBeenVisited() {
+  public boolean getHasBeenVisited() {
     return hasBeenVisited;
   }
 
