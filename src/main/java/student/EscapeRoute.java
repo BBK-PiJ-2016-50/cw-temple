@@ -13,8 +13,7 @@ import java.util.Set;
 
 /**
  * builds up a picture of the map for use when escaping.
- * allows the shortest route to the exit to be determined.
- * uses Dijstra's algorithm which is a modified version of a breadth first search approach.
+ * uses Dijstra's algorithm to solve problem of finding shortest distance between two points.
  *
  * @author Ian Robinson
  */
