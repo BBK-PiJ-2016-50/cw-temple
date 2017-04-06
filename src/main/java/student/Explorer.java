@@ -4,7 +4,6 @@ import game.EscapeState;
 import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
-import searchexample.Graph;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -12,6 +11,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
+/**
+ * logic for exploring the cavern and for escaping from the cavern.
+ */
 public class Explorer {
 
   /**
@@ -47,10 +49,10 @@ public class Explorer {
   public void explore(ExplorationState state) {
 
     //stack to keep track of visited graph nodes
-    Stack<GraphNode> nodeStack = new Stack<>();
+    final Stack<GraphNode> nodeStack = new Stack<>();
 
     //graph to keep track of nodes and their connections
-    ExploreGraph exploreGraph = new ExploreGraph();
+    final ExploreGraph exploreGraph = new ExploreGraph();
 
     //create root node and add to graph and stack
     GraphNode currentNode = new GraphNode(state.getCurrentLocation(),
@@ -62,10 +64,10 @@ public class Explorer {
     while (!orbFound(state)) {
 
       //add and connect the current node's neighbours if they don't exist as nodes
-      Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
-      for (NodeStatus neighbour : currentNodeNeighbours) {
+      final Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
+      for (final NodeStatus neighbour : currentNodeNeighbours) {
         if (!exploreGraph.idExists(neighbour.getId())) {
-          GraphNode newNode = new GraphNode(neighbour.getId(),
+          final GraphNode newNode = new GraphNode(neighbour.getId(),
                                             neighbour.getDistanceToTarget(),
                                             false);
           exploreGraph.addNode(newNode);
@@ -74,20 +76,20 @@ public class Explorer {
       }
 
       //find neighbour nodes that haven't been visited
-      List<GraphNode> unvisitedNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
+      final List<GraphNode> unvisitedNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
 
       //determine which node to move to next
       if (unvisitedNeighbours.isEmpty()) {
         //if the current node has no unvisited neighbours then return to the previous one
         //update the stack and the current node
         nodeStack.pop();
-        GraphNode prevNode = nodeStack.peek();
+        final GraphNode prevNode = nodeStack.peek();
         state.moveTo(prevNode.getId());
         currentNode = prevNode;
       } else {
-        //if the node has unvisited neighbours find the closest one to the orb and move to it
+        //if the node has unvisited neighbours find the closest one to the orb
         //update the stack, current node and node status
-        GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvisitedNeighbours);
+        final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvisitedNeighbours);
         state.moveTo(closestNodeToOrb.getId());
         closestNodeToOrb.setHasBeenVisited(true);
         nodeStack.push(closestNodeToOrb);
@@ -98,8 +100,12 @@ public class Explorer {
 
   }
 
-  //checks to see if orb found.  Orb is found if distance to target is 0
-  private boolean orbFound(ExplorationState state) {
+  /**
+   * checks to see if orb found.  Orb is found if distance to target is 0.
+   * @param state the information available at the current state.
+   * @return boolean indicating whether the orb has been found or not.
+   */
+  private boolean orbFound(final ExplorationState state) {
     return state.getDistanceToTarget() == 0;
   }
 
@@ -129,32 +135,43 @@ public class Explorer {
    */
   public void escape(EscapeState state) {
 
-    //use Dijkstra algorithm to solve problem of shortest distance between two points
-    //http://www.vogella.com/tutorials/JavaAlgorithmsDijkstra/article.html
-    //returns a shortest path, convert this to a queue and then use this in the while loop
+    //create a new escape route
+    final EscapeRoute escapeRoute = new EscapeRoute();
 
-    EscapeRoute escapeRoute = new EscapeRoute();
+    //using the start node, find the shortest distance to all other nodes
     escapeRoute.findRoute(state.getCurrentNode());
-    Queue<Node> pathToTake = new LinkedList<>(escapeRoute.getRoute(state.getExit()));
-    int totalTime = state.getTimeRemaining();
 
+    //find the shortest route to the exit node
+    final List<Node> shortestRoute = escapeRoute.getRoute(state.getExit());
 
-    pathToTake.remove();  // ensures the explorer moves from the start position
+    //convert the shortestPath into a queue
+    final Queue<Node> pathToTake = new LinkedList<>(shortestRoute);
+
+    //remove the first item from the queue
+    //this ensures the explorer can move from the start position
+    pathToTake.remove();
+
     while (!exitFound(state)) {
 
-      Node routeNode = pathToTake.remove();
+      //move to the next node in the path to take
+      final Node routeNode = pathToTake.remove();
       state.moveTo(routeNode);
+
+      //ensure that gold is collected if there is any
       if (routeNode.getTile().getGold() > 0) {
         state.pickUpGold();
       }
 
-      //optimise to get route which gets most gold gets back within time
-      //current solution still doesn't finish on some runs - keep it as looking at immediate neighbour only?
+      //find optimal route to collect most gold within given time
+      //whilst walking the path to exit, check neighbour nodes for gold
+      //if they do move to the node and collect
+      //then check if subsequent neighbours have gold.  If they do then move to and collect
+      //a stack is used to keep the explorer on track so they can get back to the escape path
+      final Stack<Node> goldTrail = new Stack<>();
       for (Node neighbour : routeNode.getNeighbours()) {
-        Stack<Node> goldTrail = new Stack<>();
         goldTrail.push(routeNode);
         Node current = neighbour;
-        while (current.getTile().getGold() > 0 && !pathToTake.contains(current) && goldTrail.size() < 2) {
+        while (current.getTile().getGold() > 0) { // && goldTrail.size() < 2
           state.moveTo(current);
           state.pickUpGold();
           goldTrail.push(current);
@@ -168,8 +185,12 @@ public class Explorer {
     }
   }
 
-  //checks to see if exit found.  Exit is found if node is not equal to getExit
-  private boolean exitFound(EscapeState state) {
+  /**
+   * checks to see if exit found.  Exit is found if current node equals exit node
+   * @param state the information available at the current state.
+   * @return boolean indicating whether the exit has been found or not.
+   */
+  private boolean exitFound(final EscapeState state) {
     return state.getExit() == state.getCurrentNode();
   }
 
