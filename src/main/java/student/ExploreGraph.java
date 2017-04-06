@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * graph keeps track of nodes {@see GraphNode} that have been found in the explore phase.
+ * graph keeps track of nodes {@see GraphNode} found in the explore phase.
  * it connects nodes together to help create a map representing the cavern.
  *
  * @author Ian Robinson
@@ -33,7 +33,7 @@ public class ExploreGraph {
   }
 
   /**
-   * allows a node to connect to a neighbour node, thus allowing the map to be built.
+   * connects a node to a neighbour node, thus allowing the map to be built.
    * @param parent the parent node of the connection.
    * @param child the child node of the connection
    */
@@ -49,21 +49,23 @@ public class ExploreGraph {
   /**
    * determines whether a node exists in the graph or not.
    * if the id can be found then it returns true, otherwise false.
-   * @param id the id of the node to be searched for.
+   * @param nodeId the id of the node to be searched for.
    * @return boolean indicating whether the node exists in the graph or not.
    */
-  public boolean idExists(final long id) {
-    for (GraphNode node : nodesInGraph) {
-      if (node.getId() == id) {
-        return true;
+  public boolean idExists(final long nodeId) {
+    boolean exists = false;
+    for (final GraphNode node : nodesInGraph) {
+      if (node.getId() == nodeId) {
+        exists = true;
+        break;
       }
     }
-    return false;
+    return exists;
   }
 
   /**
    * finds a node's neighbours which haven't yet been visited and returns them.
-   * it helps the explore phase in {@see Explorer} to determine which node to visit next.
+   * helps to determine which node to visit next in the the explore phase.
    * @param node the node that the explorer is currently on.
    * @return a list of neighbour nodes that haven't yet been visited.
    */
@@ -83,12 +85,12 @@ public class ExploreGraph {
   /**
    * finds the node closest to the orb that has not yet been visited.
    * @param unvisitedNeighbours a list of unvisited neighbours which may be moved to.
-   * @return the unvisited neighbour node that is closest to the orb
+   * @return the unvisited neighbour node that is closest to the orb.
    */
   public GraphNode getClosestNode(final List<GraphNode> unvisitedNeighbours) {
     //grab any unvisited node and compare the rest of them to it
     GraphNode closestNode = unvisitedNeighbours.iterator().next();
-    for (GraphNode neighbour : unvisitedNeighbours) {
+    for (final GraphNode neighbour : unvisitedNeighbours) {
       if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
         closestNode = neighbour;
       }
