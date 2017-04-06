@@ -8,7 +8,7 @@ package student;
  *
  * @author Ian Robinson
  */
-public class GraphNode {
+class GraphNode {
 
   /**
    * the unique long value assigned to the node.
@@ -31,7 +31,7 @@ public class GraphNode {
    * @param distanceToOrb the distance the node is from the orb.
    * @param hasBeenVisited indicates whether the node has been visited before or not.
    */
-  public GraphNode(final long id,
+  GraphNode(final long id,
                    final int distanceToOrb,
                    final boolean hasBeenVisited) {
     this.id = id;
@@ -43,7 +43,7 @@ public class GraphNode {
    * sets the hasBeenVisited flag to true or false.
    * @param hasBeenVisited the new value for the hasBeenVisited flag.
    */
-  public void setHasBeenVisited(final boolean hasBeenVisited) {
+  void setHasBeenVisited(final boolean hasBeenVisited) {
     this.hasBeenVisited = hasBeenVisited;
   }
 
@@ -51,7 +51,7 @@ public class GraphNode {
    * returns the node's id.
    * @return the id value for the node.
    */
-  public long getId() {
+  long getId() {
     return id;
   }
 
@@ -59,7 +59,7 @@ public class GraphNode {
    * returns the distance between the node and the orb.
    * @return the distanceToOrb value.
    */
-  public int getDistanceToOrb() {
+  int getDistanceToOrb() {
     return distanceToOrb;
   }
 
@@ -67,7 +67,7 @@ public class GraphNode {
    * indicates whether the node has been visited before or not.
    * @return boolean value stating whether node has been visited or not.
    */
-  public boolean getHasBeenVisited() {
+  boolean getHasBeenVisited() {
     return hasBeenVisited;
   }
 
