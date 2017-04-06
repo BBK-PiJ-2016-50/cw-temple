@@ -2,10 +2,15 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import game.NodeStatus;
 import game.Node;
+import game.NodeStatus;
+import searchexample.Graph;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 public class Explorer {
 
@@ -41,46 +46,49 @@ public class Explorer {
    */
   public void explore(ExplorationState state) {
 
-    Stack<GraphNode> nodeStack = new Stack<>();  //keeps track of graph nodes that have been visited
+    //stack to keep track of visited graph nodes
+    Stack<GraphNode> nodeStack = new Stack<>();
+
+    //graph to keep track of nodes and their connections
     ExploreGraph exploreGraph = new ExploreGraph();
+
     //create root node and add to graph and stack
     GraphNode currentNode = new GraphNode(state.getCurrentLocation(),
-            state.getDistanceToTarget(),
-            true);
+                                          state.getDistanceToTarget(),
+                                          true);
     exploreGraph.addNode(currentNode);
     nodeStack.push(currentNode);
 
     while (!orbFound(state)) {
 
-      //System.out.println(state.getCurrentLocation());
-
-      //add and connect currentNode's neighbours if they haven't already been added/connected
+      //add and connect the current node's neighbours if they don't exist as nodes
       Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
       for (NodeStatus neighbour : currentNodeNeighbours) {
         if (!exploreGraph.idExists(neighbour.getId())) {
           GraphNode newNode = new GraphNode(neighbour.getId(),
-                  neighbour.getDistanceToTarget(),
-                  false);
+                                            neighbour.getDistanceToTarget(),
+                                            false);
           exploreGraph.addNode(newNode);
           exploreGraph.connectNode(currentNode, newNode);
         }
-        //do i need to add an else statement here which connects the parent to neighbours which already exist as nodes?
       }
 
       //find neighbour nodes that haven't been visited
       List<GraphNode> unvisitedNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
 
+      //determine which node to move to next
       if (unvisitedNeighbours.isEmpty()) {
-        //if all neighbours visited then stack.pop until you get to a node that has unvisited neighbours
+        //if the current node has no unvisited neighbours then return to the previous one
+        //update the stack and the current node
         nodeStack.pop();
-        state.moveTo(nodeStack.peek().getId());
-        currentNode = nodeStack.peek();
+        GraphNode prevNode = nodeStack.peek();
+        state.moveTo(prevNode.getId());
+        currentNode = prevNode;
       } else {
-        //find closest unvisited node to orb
+        //if the node has unvisited neighbours find the closest one to the orb and move to it
+        //update the stack, current node and node status
         GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvisitedNeighbours);
-        //move to this unvisited neighbour
         state.moveTo(closestNodeToOrb.getId());
-        //update status
         closestNodeToOrb.setHasBeenVisited(true);
         nodeStack.push(closestNodeToOrb);
         currentNode = closestNodeToOrb;
@@ -141,21 +149,20 @@ public class Explorer {
       }
 
       //optimise to get route which gets most gold gets back within time
-      if (state.getTimeRemaining() > (totalTime / 1.5)) {   //covert magic number to constant variable
-        for (Node neighbour : routeNode.getNeighbours()) {
-          Stack<Node> goldTrail = new Stack<>();
-          goldTrail.push(routeNode);
-          Node current = neighbour;
-          while (current.getTile().getGold() > 0) {
-            state.moveTo(current);
-            state.pickUpGold();
-            goldTrail.push(current);
-            current = current.getNeighbours().iterator().next();
-          }
-          goldTrail.pop();
-          while (!goldTrail.isEmpty()) {
-            state.moveTo(goldTrail.pop());
-          }
+      //current solution still doesn't finish on some runs - keep it as looking at immediate neighbour only?
+      for (Node neighbour : routeNode.getNeighbours()) {
+        Stack<Node> goldTrail = new Stack<>();
+        goldTrail.push(routeNode);
+        Node current = neighbour;
+        while (current.getTile().getGold() > 0 && !pathToTake.contains(current) && goldTrail.size() < 2) {
+          state.moveTo(current);
+          state.pickUpGold();
+          goldTrail.push(current);
+          current = current.getNeighbours().iterator().next();
+        }
+        goldTrail.pop();
+        while (!goldTrail.isEmpty()) {
+          state.moveTo(goldTrail.pop());
         }
       }
     }
