@@ -13,12 +13,12 @@ class GraphNode {
   /**
    * the unique long value assigned to the node.
    */
-  private long id;
+  private final long nodeId;
 
   /**
    * the distance from this node to the orb as an int value.
    */
-  private int distanceToOrb;
+  private final int distanceToOrb;
 
   /**
    * boolean flag stating whether node has been visited or not.
@@ -27,14 +27,14 @@ class GraphNode {
 
   /**
    * constructor for generating the graph node.
-   * @param id the unique id for the node.
+   * @param nodeId the unique id for the node.
    * @param distanceToOrb the distance the node is from the orb.
-   * @param hasBeenVisited indicates whether the node has been visited before or not.
+   * @param hasBeenVisited indicates if the node has been visited or not.
    */
-  public GraphNode(final long id,
+  public GraphNode(final long nodeId,
                    final int distanceToOrb,
                    final boolean hasBeenVisited) {
-    this.id = id;
+    this.nodeId = nodeId;
     this.distanceToOrb = distanceToOrb;
     this.hasBeenVisited = hasBeenVisited;
   }
@@ -52,7 +52,7 @@ class GraphNode {
    * @return the id value for the node.
    */
   public long getId() {
-    return id;
+    return nodeId;
   }
 
   /**

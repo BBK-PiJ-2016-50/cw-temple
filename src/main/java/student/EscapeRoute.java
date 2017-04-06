@@ -31,22 +31,20 @@ public class EscapeRoute {
 
   /**
    * finds the shortest route from the start node to the exit node.
-   * @param startNode the node that the explorer starts from.
+   * @param startNode the node that the explorer starts from when starting the escape.
    */
   public void findRoute(final Node startNode) {
     distanceToNode = new HashMap<>();
     pathNodes = new HashMap<>();
     distanceToNode.put(startNode, 0);
     Set<Node> unvisited = new HashSet<>();
-    Set<Node> visited = new HashSet<>();
-    List<Node> unvisitedNeighbours = new ArrayList<>();
     unvisited.add(startNode);
     //loops through the unvisited nodes until it is empty.
     //initially this will be added to multiple times, but then gradually emptied.
-    while (!unvisited.isEmpty()) {
+    while (unvisited.size() > 0) {
       //find the node closest to the currentNode picked from the unvisited list
       Node closestNode = null;
-      for (final Node node : unvisited) {
+      for (Node node : unvisited) {
         if (closestNode == null) {
           closestNode = node;
         } else {
@@ -56,9 +54,11 @@ public class EscapeRoute {
         }
       }
       //move the unvisited node to the visited nodes set
+      Set<Node> visited = new HashSet<>();
       visited.add(closestNode);
       unvisited.remove(closestNode);
       //for the closest node find all its neighbour nodes
+      List<Node> unvisitedNeighbours = new ArrayList<>();
       for (Node n : closestNode.getNeighbours()) {
         if (!visited.contains(n)) {
           unvisitedNeighbours.add(n);
@@ -67,7 +67,7 @@ public class EscapeRoute {
       //then for each neighbour node find the minimal distance by looking at all edges
       //then check if the distance to this neighbour can be reduced
       //if it can then the distance is updated and the node is added unvisited nodes
-      for (final Node neighbour : unvisitedNeighbours) {
+      for (Node neighbour : unvisitedNeighbours) {
         int edgeLength = closestNode.getEdge(neighbour).length();
         if (getShortestDistance(neighbour) > getShortestDistance(closestNode) + edgeLength) {
           distanceToNode.put(neighbour, getShortestDistance(closestNode) + edgeLength);
@@ -87,15 +87,15 @@ public class EscapeRoute {
     Integer dist = distanceToNode.get(target);
     if (dist == null) {
       return Integer.MAX_VALUE;
+    } else {
+      return dist;
     }
-    return dist;
   }
 
   /**
-   * uses the pathNodes map to construct the shortest path
-   * between the start node and the exit node.
+   * uses the pathNodes map to construct the shortest path between the start node and the exit node.
    * @param endNode the node which the explorer wants to get to.
-   * @return the shortest route from start to exit.
+   * @return a list of nodes containing the complete shortest route from start to exit.
    */
   public List<Node> getRoute(final Node endNode) {
     List<Node> route = new LinkedList<>();
