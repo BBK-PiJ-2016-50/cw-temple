@@ -8,7 +8,7 @@ package student;
  *
  * @author Ian Robinson
  */
-class GraphNode {
+public class GraphNode {
 
   /**
    * the unique long value assigned to the node.

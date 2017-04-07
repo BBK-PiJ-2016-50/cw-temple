@@ -173,7 +173,7 @@ public class Explorer {
       for (final Node neighbour : routeNode.getNeighbours()) {
         goldTrail.push(routeNode);
         Node current = neighbour;
-        Tile currentTile = current.getTile();
+        final Tile currentTile = current.getTile();
         // && !pathToTake.contains(neighbour) && goldTrail.size() < 2
         while (currentTile.getGold() > 0) {
           state.moveTo(current);
@@ -190,7 +190,7 @@ public class Explorer {
   }
 
   /**
-   * checks to see if exit found.  Exit is found if current node equals exit node
+   * checks to see if exit found.  Exit is found if current node equals exit node.
    * @param state the information available at the current state.
    * @return boolean indicating whether the exit has been found or not.
    */

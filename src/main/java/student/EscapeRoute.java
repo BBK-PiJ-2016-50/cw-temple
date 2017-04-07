@@ -86,9 +86,9 @@ public class EscapeRoute {
    * @return the shortest distance.
    */
   private int getShortestDistance(final Node target) {
-    final Integer dist = distanceToNode.get(target);
+    Integer dist = distanceToNode.get(target);
     if (dist == null) {
-      return Integer.MAX_VALUE;
+      dist = Integer.MAX_VALUE;
     }
     return dist;
 

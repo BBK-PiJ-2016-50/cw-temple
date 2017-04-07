@@ -16,33 +16,33 @@ public class ExploreGraph {
   /**
    * list of all nodes that have been added to the graph.
    */
-  private static final List<GraphNode> nodesInGraph = new ArrayList<>();
+  private static final List<GraphNode> NodesInGraph = new ArrayList<>();
 
   /**
    * map of each node and their child nodes.
    * provides a complete picture of the graph's node connections.
    */
-  private static final Map<GraphNode, List<GraphNode>> nodeConnections = new ConcurrentHashMap<>();
+  private static final Map<GraphNode, List<GraphNode>> NodeConnections = new ConcurrentHashMap<>();
 
   /**
-   * adds a node to the graph by storing it in the nodesInGraph variable.
+   * adds a node to the graph by storing it in the NodesInGraph variable.
    * @param node the node that will be added to the graph.
    */
   public void addNode(final GraphNode node) {
-    nodesInGraph.add(node);
+    NodesInGraph.add(node);
   }
 
   /**
    * connects a node to a neighbour node, thus allowing the map to be built.
    * @param parent the parent node of the connection.
-   * @param child the child node of the connection
+   * @param child the child node of the connection.
    */
   public void connectNode(final GraphNode parent, final GraphNode child) {
-    List<GraphNode> listOfChildNodes = nodeConnections.get(parent);
+    List<GraphNode> listOfChildNodes = NodeConnections.get(parent);
     if (listOfChildNodes == null) {
       listOfChildNodes = new ArrayList<>();
     }
-    nodeConnections.put(parent, listOfChildNodes);
+    NodeConnections.put(parent, listOfChildNodes);
     listOfChildNodes.add(child);
   }
 
@@ -54,7 +54,7 @@ public class ExploreGraph {
    */
   public boolean idExists(final long nodeId) {
     boolean exists = false;
-    for (final GraphNode node : nodesInGraph) {
+    for (final GraphNode node : NodesInGraph) {
       if (node.getId() == nodeId) {
         exists = true;
         break;
@@ -71,7 +71,7 @@ public class ExploreGraph {
    */
   public List<GraphNode> getUnvisitedNeighbours(final GraphNode node) {
     final List<GraphNode> unvNeighbours = new ArrayList<>();
-    final List<GraphNode> neighbourNodes = nodeConnections.get(node);
+    final List<GraphNode> neighbourNodes = NodeConnections.get(node);
     if (neighbourNodes != null) { //without this statement a nullPointerException could be raised
       for (final GraphNode neighbour : neighbourNodes) {
         if (!neighbour.getHasBeenVisited()) {
