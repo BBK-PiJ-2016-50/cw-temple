@@ -4,6 +4,7 @@ import game.EscapeState;
 import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
+import game.Tile;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -46,7 +47,7 @@ public class Explorer {
    *
    * @param state the information available at the current state
    */
-  public void explore(ExplorationState state) {
+  public void explore(final ExplorationState state) {
 
     //stack to keep track of visited graph nodes
     final Stack<GraphNode> nodeStack = new Stack<>();
@@ -64,8 +65,8 @@ public class Explorer {
     while (!orbFound(state)) {
 
       //add and connect the current node's neighbours if they don't exist as nodes
-      final Collection<NodeStatus> currentNodeNeighbours = state.getNeighbours();
-      for (final NodeStatus neighbour : currentNodeNeighbours) {
+      final Collection<NodeStatus> neighbours = state.getNeighbours();
+      for (final NodeStatus neighbour : neighbours) {
         if (!exploreGraph.idExists(neighbour.getId())) {
           final GraphNode newNode = new GraphNode(neighbour.getId(),
                                             neighbour.getDistanceToTarget(),
@@ -76,10 +77,10 @@ public class Explorer {
       }
 
       //find neighbour nodes that haven't been visited
-      final List<GraphNode> unvisitedNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
+      final List<GraphNode> unvNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
 
       //determine which node to move to next
-      if (unvisitedNeighbours.isEmpty()) {
+      if (unvNeighbours.isEmpty()) {
         //if the current node has no unvisited neighbours then return to the previous one
         //update the stack and the current node
         nodeStack.pop();
@@ -89,7 +90,7 @@ public class Explorer {
       } else {
         //if the node has unvisited neighbours find the closest one to the orb
         //update the stack, current node and node status
-        final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvisitedNeighbours);
+        final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvNeighbours);
         state.moveTo(closestNodeToOrb.getId());
         closestNodeToOrb.setHasBeenVisited(true);
         nodeStack.push(closestNodeToOrb);
@@ -133,7 +134,7 @@ public class Explorer {
    *
    * @param state the information available at the current state
    */
-  public void escape(EscapeState state) {
+  public void escape(final EscapeState state) {
 
     //create a new escape route
     final EscapeRoute escapeRoute = new EscapeRoute();
@@ -155,23 +156,26 @@ public class Explorer {
 
       //move to the next node in the path to take
       final Node routeNode = pathToTake.remove();
+      final Tile routeTile = routeNode.getTile();
       state.moveTo(routeNode);
 
       //ensure that gold is collected if there is any
-      if (routeNode.getTile().getGold() > 0) {
+      if (routeTile.getGold() > 0) {
         state.pickUpGold();
       }
 
       //find optimal route to collect most gold within given time
       //whilst walking the path to exit, check neighbour nodes for gold
-      //if they do move to the node and collect
-      //then check if subsequent neighbours have gold.  If they do then move to and collect
-      //a stack is used to keep the explorer on track so they can get back to the escape path
+      //if they do, then move to the node and collect it
+      //then collect from any subsequent neighbours if they have gold
+      //stack used to ensure explorer can get back to the escape path
       final Stack<Node> goldTrail = new Stack<>();
-      for (Node neighbour : routeNode.getNeighbours()) {
+      for (final Node neighbour : routeNode.getNeighbours()) {
         goldTrail.push(routeNode);
         Node current = neighbour;
-        while (current.getTile().getGold() > 0) { // && goldTrail.size() < 2
+        Tile currentTile = current.getTile();
+        // && !pathToTake.contains(neighbour) && goldTrail.size() < 2
+        while (currentTile.getGold() > 0) {
           state.moveTo(current);
           state.pickUpGold();
           goldTrail.push(current);
