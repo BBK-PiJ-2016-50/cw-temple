@@ -1,5 +1,6 @@
 package student;
 
+import game.Edge;
 import game.Node;
 
 import java.util.ArrayList;
@@ -22,29 +23,30 @@ public class EscapeRoute {
   /**
    * stores each visited node and the closest node that it is connected to.
    */
-  private Map<Node, Node> pathNodes;
+  private static Map<Node, Node> pathNodes;
 
   /**
    * map of all visited nodes and the distance to another node.
    */
-  private Map<Node, Integer> distanceToNode;
+  private static Map<Node, Integer> distanceToNode;
 
   /**
    * finds the shortest route from the start node to the exit node.
-   * @param startNode the node that the explorer starts from when starting the escape.
+   * @param startNode the node that the explorer starts from.
    */
   public void findRoute(final Node startNode) {
     distanceToNode = new HashMap<>();
     pathNodes = new HashMap<>();
     distanceToNode.put(startNode, 0);
-    Set<Node> unvisited = new HashSet<>();
+    final Set<Node> unvisited = new HashSet<>();
+    final Set<Node> visited = new HashSet<>();
     unvisited.add(startNode);
     //loops through the unvisited nodes until it is empty.
     //initially this will be added to multiple times, but then gradually emptied.
-    while (unvisited.size() > 0) {
+    while (!unvisited.isEmpty()) {
       //find the node closest to the currentNode picked from the unvisited list
       Node closestNode = null;
-      for (Node node : unvisited) {
+      for (final Node node : unvisited) {
         if (closestNode == null) {
           closestNode = node;
         } else {
@@ -54,23 +56,23 @@ public class EscapeRoute {
         }
       }
       //move the unvisited node to the visited nodes set
-      Set<Node> visited = new HashSet<>();
       visited.add(closestNode);
       unvisited.remove(closestNode);
       //for the closest node find all its neighbour nodes
-      List<Node> unvisitedNeighbours = new ArrayList<>();
-      for (Node n : closestNode.getNeighbours()) {
+      final List<Node> unvNeighbours = new ArrayList<>();
+      final Set<Node> neighbours = closestNode.getNeighbours();
+      for (final Node n : neighbours) {
         if (!visited.contains(n)) {
-          unvisitedNeighbours.add(n);
+          unvNeighbours.add(n);
         }
       }
       //then for each neighbour node find the minimal distance by looking at all edges
       //then check if the distance to this neighbour can be reduced
       //if it can then the distance is updated and the node is added unvisited nodes
-      for (Node neighbour : unvisitedNeighbours) {
-        int edgeLength = closestNode.getEdge(neighbour).length();
-        if (getShortestDistance(neighbour) > getShortestDistance(closestNode) + edgeLength) {
-          distanceToNode.put(neighbour, getShortestDistance(closestNode) + edgeLength);
+      for (final Node neighbour : unvNeighbours) {
+        final Edge edge = closestNode.getEdge(neighbour);
+        if (getShortestDistance(neighbour) > getShortestDistance(closestNode) + edge.length()) {
+          distanceToNode.put(neighbour, getShortestDistance(closestNode) + edge.length());
           pathNodes.put(neighbour, closestNode);
           unvisited.add(neighbour);
         }
@@ -84,21 +86,21 @@ public class EscapeRoute {
    * @return the shortest distance.
    */
   private int getShortestDistance(final Node target) {
-    Integer dist = distanceToNode.get(target);
+    final Integer dist = distanceToNode.get(target);
     if (dist == null) {
       return Integer.MAX_VALUE;
-    } else {
-      return dist;
     }
+    return dist;
+
   }
 
   /**
-   * uses the pathNodes map to construct the shortest path between the start node and the exit node.
+   * uses the pathNodes map to construct the shortest path.
    * @param endNode the node which the explorer wants to get to.
-   * @return a list of nodes containing the complete shortest route from start to exit.
+   * @return the shortest route from start to exit as a list of nodes.
    */
   public List<Node> getRoute(final Node endNode) {
-    List<Node> route = new LinkedList<>();
+    final List<Node> route = new LinkedList<>();
     Node nextNode = endNode;
     route.add(nextNode);
     while (pathNodes.get(nextNode) != null) {
