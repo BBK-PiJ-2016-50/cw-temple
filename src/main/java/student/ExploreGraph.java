@@ -16,13 +16,13 @@ public class ExploreGraph {
   /**
    * list of all nodes that have been added to the graph.
    */
-  private final List<GraphNode> nodesInGraph = new ArrayList<>();
+  private static final List<GraphNode> nodesInGraph = new ArrayList<>();
 
   /**
    * map of each node and their child nodes.
    * provides a complete picture of the graph's node connections.
    */
-  private final Map<GraphNode, List<GraphNode>> nodeConnections = new ConcurrentHashMap<>();
+  private static final Map<GraphNode, List<GraphNode>> nodeConnections = new ConcurrentHashMap<>();
 
   /**
    * adds a node to the graph by storing it in the nodesInGraph variable.
@@ -70,27 +70,27 @@ public class ExploreGraph {
    * @return a list of neighbour nodes that haven't yet been visited.
    */
   public List<GraphNode> getUnvisitedNeighbours(final GraphNode node) {
-    List<GraphNode> unvisitedNeighbours = new ArrayList<>();
-    List<GraphNode> neighbourNodes = nodeConnections.get(node);
+    final List<GraphNode> unvNeighbours = new ArrayList<>();
+    final List<GraphNode> neighbourNodes = nodeConnections.get(node);
     if (neighbourNodes != null) { //without this statement a nullPointerException could be raised
-      for (GraphNode neighbour : neighbourNodes) {
+      for (final GraphNode neighbour : neighbourNodes) {
         if (!neighbour.getHasBeenVisited()) {
-          unvisitedNeighbours.add(neighbour);
+          unvNeighbours.add(neighbour);
         }
       }
     }
-    return unvisitedNeighbours;
+    return unvNeighbours;
   }
 
   /**
    * finds the node closest to the orb that has not yet been visited.
-   * @param unvisitedNeighbours a list of unvisited neighbours which may be moved to.
+   * @param unvNeighbours a list of unvisited neighbours which may be moved to.
    * @return the unvisited neighbour node that is closest to the orb.
    */
-  public GraphNode getClosestNode(final List<GraphNode> unvisitedNeighbours) {
+  public GraphNode getClosestNode(final List<GraphNode> unvNeighbours) {
     //grab any unvisited node and compare the rest of them to it
-    GraphNode closestNode = unvisitedNeighbours.iterator().next();
-    for (final GraphNode neighbour : unvisitedNeighbours) {
+    GraphNode closestNode = unvNeighbours.iterator().next();
+    for (final GraphNode neighbour : unvNeighbours) {
       if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
         closestNode = neighbour;
       }
