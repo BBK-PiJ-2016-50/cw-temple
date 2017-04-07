@@ -144,9 +144,15 @@ public class Explorer {
     //convert the shortestPath into a queue
     final Queue<Node> pathToTake = new LinkedList<>(shortestRoute);
 
+
+
     //remove the first item from the queue
     //this ensures the explorer can move from the start position
-    pathToTake.remove();
+    final Node startNode = pathToTake.remove();
+    final Tile startTile = startNode.getTile();
+    if (startTile.getGold() > 0) {
+      state.pickUpGold();
+    }
 
     while (!exitFound(state)) {
 
