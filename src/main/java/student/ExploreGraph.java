@@ -1,5 +1,8 @@
 package student;
 
+import searchexample.Graph;
+import searchexample.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,22 @@ public class ExploreGraph {
    * provides a complete picture of the graph's node connections.
    */
   private static final Map<GraphNode, List<GraphNode>> NodeConnections = new ConcurrentHashMap<>();
+
+  /**
+   * returns the list of nodes that exist in the graph.
+   * @return the list of nodes that exist for the graph.
+   */
+  public List<GraphNode> getNodesInGraph() {
+    return NodesInGraph;
+  }
+
+  /**
+   * returns the list of node connections that make up the graph.
+   * @return the list of node connections that exist for the graph.
+   */
+  public Map<GraphNode, List<GraphNode>> getNodeConnections() {
+    return NodeConnections;
+  }
 
   /**
    * adds a node to the graph by storing it in the NodesInGraph variable.
