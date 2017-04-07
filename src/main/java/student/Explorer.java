@@ -85,13 +85,13 @@ public class Explorer {
         //update the stack and the current node
         nodeStack.pop();
         final GraphNode prevNode = nodeStack.peek();
-        state.moveTo(prevNode.getId());
+        state.moveTo(prevNode.getNodeId());
         currentNode = prevNode;
       } else {
         //if the node has unvisited neighbours find the closest one to the orb
         //update the stack, current node and node status
         final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvNeighbours);
-        state.moveTo(closestNodeToOrb.getId());
+        state.moveTo(closestNodeToOrb.getNodeId());
         closestNodeToOrb.setHasBeenVisited(true);
         nodeStack.push(closestNodeToOrb);
         currentNode = closestNodeToOrb;

@@ -51,7 +51,7 @@ public class GraphNode {
    * returns the node's id.
    * @return the id value for the node.
    */
-  public long getId() {
+  public long getNodeId() {
     return nodeId;
   }
 

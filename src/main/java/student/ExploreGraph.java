@@ -55,7 +55,7 @@ public class ExploreGraph {
   public boolean idExists(final long nodeId) {
     boolean exists = false;
     for (final GraphNode node : NodesInGraph) {
-      if (node.getId() == nodeId) {
+      if (node.getNodeId() == nodeId) {
         exists = true;
         break;
       }
