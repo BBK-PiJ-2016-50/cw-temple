@@ -68,7 +68,7 @@ public class EscapeRoute {
       }
       //then for each neighbour node find the minimal distance by looking at all edges
       //then check if the distance to this neighbour can be reduced
-      //if it can then the distance is updated and the node is added unvisited nodes
+      //if it can then the distance is updated and the node is added to the unvisited nodes
       for (final Node neighbour : unvNeighbours) {
         final Edge edge = closestNode.getEdge(neighbour);
         if (getShortestDistance(neighbour) > getShortestDistance(closestNode) + edge.length()) {

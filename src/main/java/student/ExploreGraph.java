@@ -1,7 +1,7 @@
 package student;
 
-import searchexample.Graph;
-import searchexample.Node;
+import game.Node;
+import game.NodeStatus;
 
 import java.util.ArrayList;
 import java.util.List;

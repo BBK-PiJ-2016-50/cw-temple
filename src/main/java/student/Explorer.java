@@ -6,11 +6,7 @@ import game.Node;
 import game.NodeStatus;
 import game.Tile;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * logic for exploring the cavern and for escaping from the cavern.
@@ -166,16 +162,17 @@ public class Explorer {
 
       //find optimal route to collect most gold within given time
       //whilst walking the path to exit, check neighbour nodes for gold
-      //if they do, then move to the node and collect it
-      //then collect from any subsequent neighbours if they have gold
+      //if they do have gold, then move to the node and collect it
+      //then collect from any subsequent neighbours if they also have gold
       //stack used to ensure explorer can get back to the escape path
       final Stack<Node> goldTrail = new Stack<>();
       for (final Node neighbour : routeNode.getNeighbours()) {
         goldTrail.push(routeNode);
         Node current = neighbour;
         final Tile currentTile = current.getTile();
-        // && !pathToTake.contains(neighbour) && goldTrail.size() < 2
-        while (currentTile.getGold() > 0) {
+        //if the current tile has gold, and isn't part of the pathToTake
+        //the move to tile and pick up the gold
+        while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
           state.moveTo(current);
           state.pickUpGold();
           goldTrail.push(current);
