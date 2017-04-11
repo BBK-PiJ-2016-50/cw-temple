@@ -63,10 +63,10 @@ public class Explorer {
     final Stack<GraphNode> nodeStack = new Stack<>();
 
     //graph to keep track of nodes and their connections
-    final ExploreGraph exploreGraph = new ExploreGraph();
+    final ExploreGraph exploreGraph = new ExploreGraphImpl();
 
     //create root node and add to graph and stack
-    GraphNode currentNode = new GraphNode(state.getCurrentLocation(),
+    GraphNode currentNode = new GraphNodeImpl(state.getCurrentLocation(),
                                           state.getDistanceToTarget(),
                                           true);
     exploreGraph.addNode(currentNode);
@@ -78,7 +78,7 @@ public class Explorer {
       final Collection<NodeStatus> neighbours = state.getNeighbours();
       for (final NodeStatus neighbour : neighbours) {
         if (!exploreGraph.idExists(neighbour.getId())) {
-          final GraphNode newNode = new GraphNode(neighbour.getId(),
+          final GraphNode newNode = new GraphNodeImpl(neighbour.getId(),
                                             neighbour.getDistanceToTarget(),
                                             false);
           exploreGraph.addNode(newNode);
@@ -138,7 +138,7 @@ public class Explorer {
   public void escape(final EscapeState state) {
 
     //create a new escape route
-    final EscapeRoute escapeRoute = new EscapeRoute();
+    final EscapeRoute escapeRoute = new EscapeRouteImpl();
 
     //using the start node, find the shortest distance to all other nodes
     escapeRoute.findRoute(state.getCurrentNode());

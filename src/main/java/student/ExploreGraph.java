@@ -1,13 +1,7 @@
 package student;
 
-import game.Node;
-import game.NodeStatus;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * graph keeps track of nodes {@see GraphNode} found in the explore phase.
@@ -15,56 +9,32 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Ian Robinson
  */
-public class ExploreGraph {
-
-  /**
-   * list of all nodes that have been added to the graph.
-   */
-  private static final List<GraphNode> NodesInGraph = new ArrayList<>();
-
-  /**
-   * map of each node and their child nodes.
-   * provides a complete picture of the graph's node connections.
-   */
-  private static final Map<GraphNode, List<GraphNode>> NodeConnections = new ConcurrentHashMap<>();
+public interface ExploreGraph {
 
   /**
    * returns the list of nodes that exist in the graph.
    * @return the list of nodes that exist for the graph.
    */
-  public List<GraphNode> getNodesInGraph() {
-    return NodesInGraph;
-  }
+  List<GraphNode> getNodesInGraph();
 
   /**
    * returns the list of node connections that make up the graph.
    * @return the list of node connections that exist for the graph.
    */
-  public Map<GraphNode, List<GraphNode>> getNodeConnections() {
-    return NodeConnections;
-  }
+  Map<GraphNode, List<GraphNode>> getNodeConnections();
 
   /**
    * adds a node to the graph by storing it in the NodesInGraph variable.
    * @param node the node that will be added to the graph.
    */
-  public void addNode(final GraphNode node) {
-    NodesInGraph.add(node);
-  }
+  void addNode(GraphNode node);
 
   /**
    * connects a node to a neighbour node, thus allowing the map to be built.
    * @param parent the parent node of the connection.
    * @param child the child node of the connection.
    */
-  public void connectNode(final GraphNode parent, final GraphNode child) {
-    List<GraphNode> listOfChildNodes = NodeConnections.get(parent);
-    if (listOfChildNodes == null) {
-      listOfChildNodes = new ArrayList<>();
-    }
-    NodeConnections.put(parent, listOfChildNodes);
-    listOfChildNodes.add(child);
-  }
+  void connectNode(GraphNode parent, GraphNode child);
 
   /**
    * determines whether a node exists in the graph or not.
@@ -72,16 +42,7 @@ public class ExploreGraph {
    * @param nodeId the id of the node to be searched for.
    * @return boolean indicating whether the node exists in the graph or not.
    */
-  public boolean idExists(final long nodeId) {
-    boolean exists = false;
-    for (final GraphNode node : NodesInGraph) {
-      if (node.getNodeId() == nodeId) {
-        exists = true;
-        break;
-      }
-    }
-    return exists;
-  }
+  boolean idExists(long nodeId);
 
   /**
    * finds a node's neighbours which haven't yet been visited and returns them.
@@ -89,17 +50,6 @@ public class ExploreGraph {
    * @param node the node that the explorer is currently on.
    * @return a list of neighbour nodes that haven't yet been visited.
    */
-  public List<GraphNode> getUnvisitedNeighbours(final GraphNode node) {
-    final List<GraphNode> unvNeighbours = new ArrayList<>();
-    final List<GraphNode> neighbourNodes = NodeConnections.get(node);
-    if (neighbourNodes != null) { //without this statement a nullPointerException could be raised
-      for (final GraphNode neighbour : neighbourNodes) {
-        if (!neighbour.getHasBeenVisited()) {
-          unvNeighbours.add(neighbour);
-        }
-      }
-    }
-    return unvNeighbours;
-  }
+  List<GraphNode> getUnvisitedNeighbours(GraphNode node);
 
 }

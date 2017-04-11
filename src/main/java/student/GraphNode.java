@@ -8,67 +8,30 @@ package student;
  *
  * @author Ian Robinson
  */
-public class GraphNode {
-
-  /**
-   * the unique long value assigned to the node.
-   */
-  private final long nodeId;
-
-  /**
-   * the distance from this node to the orb as an int value.
-   */
-  private final int distanceToOrb;
-
-  /**
-   * boolean flag stating whether node has been visited or not.
-   */
-  private boolean hasBeenVisited;
-
-  /**
-   * constructor for generating the graph node.
-   * @param nodeId the unique id for the node.
-   * @param distanceToOrb the distance the node is from the orb.
-   * @param hasBeenVisited indicates if the node has been visited or not.
-   */
-  public GraphNode(final long nodeId,
-                   final int distanceToOrb,
-                   final boolean hasBeenVisited) {
-    this.nodeId = nodeId;
-    this.distanceToOrb = distanceToOrb;
-    this.hasBeenVisited = hasBeenVisited;
-  }
+public interface GraphNode {
 
   /**
    * sets the hasBeenVisited flag to true or false.
    * @param hasBeenVisited the new value for the hasBeenVisited flag.
    */
-  public void setHasBeenVisited(final boolean hasBeenVisited) {
-    this.hasBeenVisited = hasBeenVisited;
-  }
+  void setHasBeenVisited(boolean hasBeenVisited);
 
   /**
    * returns the node's id.
    * @return the id value for the node.
    */
-  public long getNodeId() {
-    return nodeId;
-  }
+  long getNodeId();
 
   /**
    * returns the distance between the node and the orb.
    * @return the distanceToOrb value.
    */
-  public int getDistanceToOrb() {
-    return distanceToOrb;
-  }
+  int getDistanceToOrb();
 
   /**
    * indicates whether the node has been visited before or not.
    * @return boolean value stating whether node has been visited or not.
    */
-  public boolean getHasBeenVisited() {
-    return hasBeenVisited;
-  }
+  boolean getHasBeenVisited();
 
 }
