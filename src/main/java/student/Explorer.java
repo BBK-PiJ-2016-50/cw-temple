@@ -1,17 +1,31 @@
 package student;
 
+import static student.ExplorerHelpers.collectGold;
+import static student.ExplorerHelpers.exitFound;
+import static student.ExplorerHelpers.getClosestNode;
+import static student.ExplorerHelpers.orbFound;
+
 import game.EscapeState;
 import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
 import game.Tile;
-
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * logic for exploring the cavern and for escaping from the cavern.
  */
 public class Explorer {
+
+  /**
+   * time at which point to abandon gold collecting in the escape phase.
+   * this allows explorer to escape whilst there is still time.
+   */
+  private static final int STOP_COLLECTION_TIME = 50;
 
   /**
    * Explore the cavern, trying to find the orb in as few steps as possible.
@@ -86,7 +100,7 @@ public class Explorer {
       } else {
         //if the node has unvisited neighbours find the closest one to the orb
         //update the stack, current node and node status
-        final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvNeighbours);
+        final GraphNode closestNodeToOrb = getClosestNode(unvNeighbours);
         state.moveTo(closestNodeToOrb.getNodeId());
         closestNodeToOrb.setHasBeenVisited(true);
         nodeStack.push(closestNodeToOrb);
@@ -95,15 +109,6 @@ public class Explorer {
 
     }
 
-  }
-
-  /**
-   * checks to see if orb found.  Orb is found if distance to target is 0.
-   * @param state the information available at the current state.
-   * @return boolean indicating whether the orb has been found or not.
-   */
-  private boolean orbFound(final ExplorationState state) {
-    return state.getDistanceToTarget() == 0;
   }
 
   /**
@@ -144,15 +149,13 @@ public class Explorer {
     //convert the shortestPath into a queue
     final Queue<Node> pathToTake = new LinkedList<>(shortestRoute);
 
-
-
     //remove the first item from the queue
     //this ensures the explorer can move from the start position
     final Node startNode = pathToTake.remove();
+
+    //collect gold from this tile
     final Tile startTile = startNode.getTile();
-    if (startTile.getGold() > 0) {
-      state.pickUpGold();
-    }
+    collectGold(startTile, state);
 
     while (!exitFound(state)) {
 
@@ -162,43 +165,34 @@ public class Explorer {
       state.moveTo(routeNode);
 
       //ensure that gold is collected if there is any
-      if (routeTile.getGold() > 0) {
-        state.pickUpGold();
-      }
+      collectGold(routeTile, state);
 
       //find optimal route to collect most gold within given time
       //whilst walking the path to exit, check neighbour nodes for gold
       //if they do have gold, then move to the node and collect it
       //then collect from any subsequent neighbours if they also have gold
       //stack used to ensure explorer can get back to the escape path
-      final Stack<Node> goldTrail = new Stack<>();
-      for (final Node neighbour : routeNode.getNeighbours()) {
-        goldTrail.push(routeNode);
-        Node current = neighbour;
-        final Tile currentTile = current.getTile();
-        //if the current tile has gold, and isn't part of the pathToTake
-        //the move to tile and pick up the gold
-        while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
-          state.moveTo(current);
-          state.pickUpGold();
-          goldTrail.push(current);
-          current = current.getNeighbours().iterator().next();
-        }
-        goldTrail.pop();
-        while (!goldTrail.isEmpty()) {
-          state.moveTo(goldTrail.pop());
+      if (state.getTimeRemaining() > STOP_COLLECTION_TIME) {
+        final Stack<Node> goldTrail = new Stack<>();
+        for (final Node neighbour : routeNode.getNeighbours()) {
+          goldTrail.push(routeNode);
+          Node current = neighbour;
+          final Tile currentTile = current.getTile();
+          //if the current tile has gold, and isn't part of the pathToTake
+          //the move to tile and pick up the gold
+          while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
+            state.moveTo(current);
+            state.pickUpGold();
+            goldTrail.push(current);
+            current = current.getNeighbours().iterator().next();
+          }
+          goldTrail.pop();
+          while (!goldTrail.isEmpty()) {
+            state.moveTo(goldTrail.pop());
+          }
         }
       }
     }
-  }
-
-  /**
-   * checks to see if exit found.  Exit is found if current node equals exit node.
-   * @param state the information available at the current state.
-   * @return boolean indicating whether the exit has been found or not.
-   */
-  private boolean exitFound(final EscapeState state) {
-    return state.getExit() == state.getCurrentNode();
   }
 
 }
