@@ -54,20 +54,14 @@ public class Explorer {
       final Collection<NodeStatus> neighbours = state.getNeighbours();
       exploreGraph.addAndConnectNeighbours(currentNode, neighbours);
 
-      //find neighbour nodes that haven't been visited
+      //find neighbour nodes that haven't been visited and determine where to move next
       final List<GraphNode> unvNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
-
-      //determine which node to move to next
-      if (unvNeighbours.isEmpty()) {
-        //if the current node has no unvisited neighbours then return to the previous one
-        //update the stack and the current node
+      if (unvNeighbours.isEmpty()) { //no unvisited neighbours
         nodeStack.pop();
         final GraphNode prevNode = nodeStack.peek();
         state.moveTo(prevNode.getNodeId());
         currentNode = prevNode;
-      } else {
-        //if the node has unvisited neighbours find the closest one to the orb
-        //update the stack, current node and node status
+      } else { //there are unvisited neighbours
         final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvNeighbours);
         state.moveTo(closestNodeToOrb.getNodeId());
         closestNodeToOrb.setHasBeenVisited(true);
