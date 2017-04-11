@@ -12,6 +12,7 @@ import game.Tile;
 public class ExplorerHelpers {
 
   /**
+   * used in the explore phase.
    * checks to see if orb found.  Orb is found if distance to target is 0.
    * @param state the information available at the current state.
    * @return boolean indicating whether the orb has been found or not.
@@ -21,6 +22,7 @@ public class ExplorerHelpers {
   }
 
   /**
+   * used in the the escape phase.
    * checks to see if exit found.  Exit is found if current node equals exit node.
    * @param state the information available at the current state.
    * @return boolean indicating whether the exit has been found or not.
@@ -30,6 +32,7 @@ public class ExplorerHelpers {
   }
 
   /**
+   * used in the escape phase.
    * picks up gold from a tile.
    * @param tile the tile to pick gold up from.
    * @param state the state of the escape phase.
