@@ -3,15 +3,9 @@ package student;
 import game.Edge;
 import game.EscapeState;
 import game.Node;
+import game.Tile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Implementation of {@see EscapeRoute}.
@@ -95,6 +89,31 @@ public class EscapeRouteImpl implements EscapeRoute {
     //ensure the path is returned with the start node first
     Collections.reverse(route);
     return route;
+  }
+
+  /**
+   * {@inheritDoc}.
+   */
+  @Override
+  public void lookAroundForGold(EscapeState state, Queue<Node> pathToTake, Node pathNode) {
+    final Stack<Node> goldTrail = new Stack<>();
+    for (final Node neighbour : pathNode.getNeighbours()) {
+      goldTrail.push(pathNode);
+      Node current = neighbour;
+      final Tile currentTile = current.getTile();
+      //if the current tile has gold, and isn't part of the pathToTake
+      //the move to tile and pick up the gold
+      while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
+        state.moveTo(current);
+        state.pickUpGold();
+        goldTrail.push(current);
+        current = current.getNeighbours().iterator().next();
+      }
+      goldTrail.pop();
+      while (!goldTrail.isEmpty()) {
+        state.moveTo(goldTrail.pop());
+      }
+    }
   }
 
   /**

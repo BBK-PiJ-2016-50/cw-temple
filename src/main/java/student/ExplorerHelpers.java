@@ -4,8 +4,6 @@ import game.EscapeState;
 import game.ExplorationState;
 import game.Tile;
 
-import java.util.List;
-
 /**
  * set of static methods for use in the {@see Explorer} class.
  *

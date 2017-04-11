@@ -37,7 +37,7 @@ public class Explorer {
 
     //keeps track of visited graph nodes
     final Stack<GraphNode> nodeStack = new Stack<>();
-    //keeps track of nodes and their connections
+    //keeps track of graph nodes and their connections
     final ExploreGraph exploreGraph = new ExploreGraphImpl();
     //create root node and add to graph and stack
     GraphNode currentNode = new GraphNodeImpl(
@@ -50,7 +50,7 @@ public class Explorer {
 
     while (!orbFound(state)) {
 
-      //add and connect the current node's neighbours if they don't exist as nodes
+      //add and connect the current node's neighbours
       final Collection<NodeStatus> neighbours = state.getNeighbours();
       exploreGraph.addAndConnectNeighbours(currentNode, neighbours);
 
@@ -74,87 +74,40 @@ public class Explorer {
   }
 
   /**
-   * Escape from the cavern before the ceiling collapses, trying to collect as much
-   * gold as possible along the way. Your solution must ALWAYS escape before time runs
-   * out, and this should be prioritized above collecting gold.
-   *
-   * <p>You now have access to the entire underlying graph, which can be accessed 
-   * through EscapeState.
-   * getCurrentNode() and getExit() will return you Node objects of interest, and getVertices()
-   * will return a collection of all nodes on the graph.</p>
-   * 
-   * <p>Note that time is measured entirely in the number of steps taken, and for each step
-   * the time remaining is decremented by the weight of the edge taken. You can use
-   * getTimeRemaining() to get the time still remaining, pickUpGold() to pick up any gold
-   * on your current tile (this will fail if no such gold exists), and moveTo() to move
-   * to a destination node adjacent to your current node.</p>
-   * 
-   * <p>You must return from this function while standing at the exit. Failing to do so before time
-   * runs out or returning from the wrong location will be considered a failed run.</p>
-   * 
-   * <p>You will always have enough time to escape using the shortest path from the starting
-   * position to the exit, although this will not collect much gold.</p>
-   *
-   * @param state the information available at the current state
+   * allows the explorer to escape from the cavern, collecting as much gold as possible before
+   * before the ceiling collapses.
+   * time is measured in the number of steps taken, and for each step the time remaining is
+   * decremented by the weight of the edge taken.
+   * the method returns once the exit is reached.
+   * @param state the information available at the current state.
    */
   public void escape(final EscapeState state) {
 
-    //create a new escape route
+    //create a new escape route to the exit node
     final EscapeRoute escapeRoute = new EscapeRouteImpl();
-
-    //using the start node, find the shortest distance to all other nodes
     escapeRoute.findRoute(state.getCurrentNode());
-
-    //find the shortest route to the exit node
     final List<Node> shortestRoute = escapeRoute.getRoute(state.getExit());
-
-    //convert the shortestPath into a queue
     final Queue<Node> pathToTake = new LinkedList<>(shortestRoute);
 
-    //remove the first item from the queue
-    //this ensures the explorer can move from the start position
-    final Node startNode = pathToTake.remove();
-
-    //collect gold from this tile
+    final Node startNode = pathToTake.remove(); //ensures explorer can move
     final Tile startTile = startNode.getTile();
     collectGold(startTile, state);
 
     while (!exitFound(state)) {
 
       //move to the next node in the path to take
-      final Node routeNode = pathToTake.remove();
-      final Tile routeTile = routeNode.getTile();
-      state.moveTo(routeNode);
+      final Node pathNode = pathToTake.remove();
+      final Tile pathTile = pathNode.getTile();
+      state.moveTo(pathNode);
+      collectGold(pathTile, state);
 
-      //ensure that gold is collected if there is any
-      collectGold(routeTile, state);
-
-      //find optimal route to collect most gold within given time
-      //whilst walking the path to exit, check neighbour nodes for gold
-      //if they do have gold, then move to the node and collect it
-      //then collect from any subsequent neighbours if they also have gold
-      //stack used to ensure explorer can get back to the escape path
+      //look for additional gold
       if (state.getTimeRemaining() > STOP_COLLECTION_TIME) {
-        final Stack<Node> goldTrail = new Stack<>();
-        for (final Node neighbour : routeNode.getNeighbours()) {
-          goldTrail.push(routeNode);
-          Node current = neighbour;
-          final Tile currentTile = current.getTile();
-          //if the current tile has gold, and isn't part of the pathToTake
-          //the move to tile and pick up the gold
-          while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
-            state.moveTo(current);
-            state.pickUpGold();
-            goldTrail.push(current);
-            current = current.getNeighbours().iterator().next();
-          }
-          goldTrail.pop();
-          while (!goldTrail.isEmpty()) {
-            state.moveTo(goldTrail.pop());
-          }
-        }
+        escapeRoute.lookAroundForGold(state, pathToTake, pathNode);
       }
+
     }
+
   }
 
 }
