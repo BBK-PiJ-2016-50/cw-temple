@@ -34,22 +34,23 @@ public class EscapeRouteImpl implements EscapeRoute {
   private Map<Node, Integer> distanceToNode;
 
   /**
-   *
+   * the closest node to a node selected from the unvisited list.
    */
   private Node closestNode;
 
   /**
-   *
+   * a set of nodes which haven't been fully evaluated.
    */
   private Set<Node> unvisited;
 
   /**
-   *
+   * a set of nodes which have been fully evaluated.
    */
   private Set<Node> visited;
 
   /**
-   *
+   * constructor sets up the framework required for finding
+   * the shortest route.
    */
   public EscapeRouteImpl() {
     this.pathNodes = new HashMap<>();
@@ -65,20 +66,19 @@ public class EscapeRouteImpl implements EscapeRoute {
   public void findRoute(final Node startNode) {
     distanceToNode.put(startNode, 0);
     unvisited.add(startNode);
-    //loops through the unvisited nodes until it is empty.
+
     while (!unvisited.isEmpty()) {
 
       closestNode = findClosestNode(unvisited);
       visited.add(closestNode);
       unvisited.remove(closestNode);
 
-      //for the closest node find all its neighbour nodes
+      //for the closest node find all the closest node's neighbour nodes
       final Set<Node> neighbours = closestNode.getNeighbours();
       final List<Node> unvNeighbours = findUnvNeighbours(neighbours);
 
-      //then for each neighbour node find the minimal distance by looking at all edges
-      //then check if the distance to this neighbour can be reduced
-      //if it can then the distance is updated and the node is added to the unvisited nodes
+      //use the unvisited neighbours to see if the shortest distance for
+      //the closest node can be improved upon.
       updateShortestDistance(unvNeighbours);
 
     }
@@ -105,20 +105,25 @@ public class EscapeRouteImpl implements EscapeRoute {
    * {@inheritDoc}.
    */
   @Override
-  public void lookAroundForGold(EscapeState state, Queue<Node> pathToTake, Node pathNode) {
+  public void lookAroundForGold(
+          final EscapeState state,
+          final Queue<Node> pathToTake,
+          final Node pathNode
+  ) {
     final Stack<Node> goldTrail = new Stack<>();
     for (final Node neighbour : pathNode.getNeighbours()) {
       goldTrail.push(pathNode);
       Node current = neighbour;
       final Tile currentTile = current.getTile();
       //if the current tile has gold, and isn't part of the pathToTake
-      //the move to tile and pick up the gold
+      //then move to tile and pick up the gold
       while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
         state.moveTo(current);
         state.pickUpGold();
         goldTrail.push(current);
         current = current.getNeighbours().iterator().next();
       }
+      //move back to original escape route
       goldTrail.pop();
       while (!goldTrail.isEmpty()) {
         state.moveTo(goldTrail.pop());
@@ -143,8 +148,8 @@ public class EscapeRouteImpl implements EscapeRoute {
 
   /**
    * find the neighbours for a given node that haven't yet been visited.
-   * @param neighbours
-   * @return
+   * @param neighbours the set of neighbour nodes to check.
+   * @return the list of unvisited neighbour nodes.
    */
   private List<Node> findUnvNeighbours(final Set<Node> neighbours) {
     final List<Node> unvNeighbours = new ArrayList<>();
@@ -157,7 +162,9 @@ public class EscapeRouteImpl implements EscapeRoute {
   }
 
   /**
-   *
+   * update the shortest distance possible to a neighbour node by looking at all edges.
+   * then check if the distance to this neighbour can be reduced.
+   * if it can then the distance is updated and the node is added to the unvisited nodes.
    */
   private void updateShortestDistance(List<Node> unvNeighbours) {
     for (final Node neighbour : unvNeighbours) {
@@ -172,6 +179,7 @@ public class EscapeRouteImpl implements EscapeRoute {
 
   /**
    * find the shortest distance to a node.
+   * if it doesn't exist then assign it a maximum value.
    * @param target the node for which shortest distance is to be deduced.
    * @return the shortest distance.
    */
