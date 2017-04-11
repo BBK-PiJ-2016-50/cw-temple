@@ -1,9 +1,11 @@
 package student;
 
-import game.Node;
 import game.NodeStatus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -83,7 +85,7 @@ public class ExploreGraphImpl implements ExploreGraph {
   public List<GraphNode> getUnvisitedNeighbours(final GraphNode node) {
     final List<GraphNode> unvNeighbours = new ArrayList<>();
     final List<GraphNode> neighbourNodes = NodeConnections.get(node);
-    if (neighbourNodes != null) { //without this statement a nullPointerException could be raised
+    if (neighbourNodes != null) {
       for (final GraphNode neighbour : neighbourNodes) {
         if (!neighbour.getHasBeenVisited()) {
           unvNeighbours.add(neighbour);
@@ -116,7 +118,6 @@ public class ExploreGraphImpl implements ExploreGraph {
    */
   @Override
   public GraphNode getClosestNode(final List<GraphNode> unvNeighbours) {
-    //grab any unvisited node and compare the rest of them to it
     GraphNode closestNode = unvNeighbours.iterator().next();
     for (final GraphNode neighbour : unvNeighbours) {
       if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
