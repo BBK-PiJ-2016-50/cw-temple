@@ -17,14 +17,13 @@ import java.util.Queue;
 import java.util.Stack;
 
 /**
- * provides the explorer with the ability to explore the cavern
- * and to escape from the cavern.
+ * provides the explorer with the ability to explore and escape from the cavern.
  */
 public class Explorer {
 
   /**
    * the time at which to abandon gold collecting in the escape phase.
-   * this allows explorer to escape whilst there is still time.
+   * this allows the explorer to escape whilst there is still time.
    */
   private static final int STOP_COLLECTION_TIME = 50;
 
@@ -39,7 +38,7 @@ public class Explorer {
     final Stack<GraphNode> nodeStack = new Stack<>();
     //keeps track of graph nodes and their connections
     final ExploreGraph exploreGraph = new ExploreGraphImpl();
-    //create root node and add to graph and stack
+    //creates root node and adds to graph and stack
     GraphNode currentNode = new GraphNodeImpl(
             state.getCurrentLocation(),
             state.getDistanceToTarget(),
@@ -50,11 +49,11 @@ public class Explorer {
 
     while (!orbFound(state)) {
 
-      //add and connect the current node's neighbours
+      //adds and connects the current node's neighbours
       final Collection<NodeStatus> neighbours = state.getNeighbours();
       exploreGraph.addAndConnectNeighbours(currentNode, neighbours);
 
-      //find neighbour nodes that haven't been visited and determine where to move next
+      //finds neighbour nodes that haven't been visited and determines where to move next
       final List<GraphNode> unvNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
       if (unvNeighbours.isEmpty()) { //no unvisited neighbours
         nodeStack.pop();
@@ -74,7 +73,7 @@ public class Explorer {
   }
 
   /**
-   * allows the explorer to escape from the cavern, collecting as much gold as possible before
+   * allows the explorer to escape from the cavern, collecting as much gold as possible
    * before the ceiling collapses.
    * time is measured in the number of steps taken, and for each step the time remaining is
    * decremented by the weight of the edge taken.
@@ -89,13 +88,14 @@ public class Explorer {
     final List<Node> shortestRoute = escapeRoute.getRoute(state.getExit());
     final Queue<Node> pathToTake = new LinkedList<>(shortestRoute);
 
-    final Node startNode = pathToTake.remove(); //ensures explorer can move
+    //begin taking the escape route path
+    final Node startNode = pathToTake.remove();
     final Tile startTile = startNode.getTile();
     collectGold(startTile, state);
 
     while (!exitFound(state)) {
 
-      //move to the next node in the path to take
+      //move to the next node in the path
       final Node pathNode = pathToTake.remove();
       final Tile pathTile = pathNode.getTile();
       state.moveTo(pathNode);
