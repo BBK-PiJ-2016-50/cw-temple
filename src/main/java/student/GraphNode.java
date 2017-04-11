@@ -2,7 +2,8 @@ package student;
 
 /**
  * used in the explore phase of {@see Explorer}.
- * the nodes are used to build up a graph of points.
+ * the nodes are used to build up a graph of points which allows the explorer
+ * to pick a route through the cavern to the orb.
  * a combination of the {@see distanceToOrb} and {@see hasBeenVisited} parameters
  * is used to help determine the route to take.
  *
@@ -11,7 +12,7 @@ package student;
 public interface GraphNode {
 
   /**
-   * sets the hasBeenVisited flag to true or false.
+   * sets the hasBeenVisited flag for the node to true or false.
    * @param hasBeenVisited the new value for the hasBeenVisited flag.
    */
   void setHasBeenVisited(boolean hasBeenVisited);
