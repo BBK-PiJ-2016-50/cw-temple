@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * graph keeps track of nodes {@see GraphNode} found in the explore phase.
+ * a graph to keep track of {@see GraphNode} found in the explore phase.
  * it connects nodes together to help create a map representing the cavern.
+ * this helps the explorer to plot their route and find the orb.
  *
  * @author Ian Robinson
  */
@@ -27,7 +28,7 @@ public interface ExploreGraph {
   Map<GraphNode, List<GraphNode>> getNodeConnections();
 
   /**
-   * adds a node to the graph by storing it in the NodesInGraph variable.
+   * adds a node to the graph.
    * @param node the node that will be added to the graph.
    */
   void addNode(GraphNode node);
@@ -56,9 +57,10 @@ public interface ExploreGraph {
   List<GraphNode> getUnvisitedNeighbours(GraphNode node);
 
   /**
-   * adds and connects a node's neighbours if they don't already
-   * exist as node's in the graph.
-   * @param neighbours the node that the explorer is currently on.
+   * adds and connects a node's neighbours if they don't already exist as
+   * node's in the graph.
+   * @param current the node that the explorer is currently on.
+   * @param neighbours the current node's neighbours
    */
   void addAndConnectNeighbours(GraphNode current, Collection<NodeStatus> neighbours);
 
