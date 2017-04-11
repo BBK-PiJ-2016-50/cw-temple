@@ -3,10 +3,7 @@ package student;
 import game.Node;
 import game.NodeStatus;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -94,6 +91,39 @@ public class ExploreGraphImpl implements ExploreGraph {
       }
     }
     return unvNeighbours;
+  }
+
+  /**
+   * {@inheritDoc}.
+   */
+  @Override
+  public void addAndConnectNeighbours(GraphNode currentNode, Collection<NodeStatus> neighbours) {
+    for (final NodeStatus neighbour : neighbours) {
+      if (!idExists(neighbour.getId())) {
+        final GraphNode newNode = new GraphNodeImpl(
+                neighbour.getId(),
+                neighbour.getDistanceToTarget(),
+                false
+        );
+        addNode(newNode);
+        connectNode(currentNode, newNode);
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}.
+   */
+  @Override
+  public GraphNode getClosestNode(final List<GraphNode> unvNeighbours) {
+    //grab any unvisited node and compare the rest of them to it
+    GraphNode closestNode = unvNeighbours.iterator().next();
+    for (final GraphNode neighbour : unvNeighbours) {
+      if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
+        closestNode = neighbour;
+      }
+    }
+    return closestNode;
   }
 
 }

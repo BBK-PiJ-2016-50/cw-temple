@@ -42,20 +42,4 @@ public class ExplorerHelpers {
     }
   }
 
-  /**
-   * finds the node closest to the orb that has not yet been visited.
-   * @param unvNeighbours a list of unvisited neighbours which may be moved to.
-   * @return the unvisited neighbour node that is closest to the orb.
-   */
-  public static GraphNode getClosestNode(final List<GraphNode> unvNeighbours) {
-    //grab any unvisited node and compare the rest of them to it
-    GraphNode closestNode = unvNeighbours.iterator().next();
-    for (final GraphNode neighbour : unvNeighbours) {
-      if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
-        closestNode = neighbour;
-      }
-    }
-    return closestNode;
-  }
-
 }

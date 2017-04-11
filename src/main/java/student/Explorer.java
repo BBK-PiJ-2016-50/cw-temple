@@ -2,7 +2,6 @@ package student;
 
 import static student.ExplorerHelpers.collectGold;
 import static student.ExplorerHelpers.exitFound;
-import static student.ExplorerHelpers.getClosestNode;
 import static student.ExplorerHelpers.orbFound;
 
 import game.EscapeState;
@@ -10,6 +9,7 @@ import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
 import game.Tile;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,58 +17,34 @@ import java.util.Queue;
 import java.util.Stack;
 
 /**
- * logic for exploring the cavern and for escaping from the cavern.
+ * provides the explorer with the ability to explore the cavern
+ * and to escape from the cavern.
  */
 public class Explorer {
 
   /**
-   * time at which point to abandon gold collecting in the escape phase.
+   * the time at which to abandon gold collecting in the escape phase.
    * this allows explorer to escape whilst there is still time.
    */
   private static final int STOP_COLLECTION_TIME = 50;
 
   /**
-   * Explore the cavern, trying to find the orb in as few steps as possible.
-   * Once you find the orb, you must return from the function in order to pick
-   * it up. If you continue to move after finding the orb rather
-   * than returning, it will not count.
-   * If you return from this function while not standing on top of the orb,
-   * it will count as a failure.
-   *   
-   * <p>There is no limit to how many steps you can take, but you will receive
-   * a score bonus multiplier for finding the orb in fewer steps.</p>
-   * 
-   * <p>At every step, you only know your current tile's ID and the ID of all
-   * open neighbor tiles, as well as the distance to the orb at each of these tiles
-   * (ignoring walls and obstacles).</p>
-   * 
-   * <p>To get information about the current state, use functions
-   * getCurrentLocation(),
-   * getNeighbours(), and
-   * getDistanceToTarget()
-   * in ExplorationState.
-   * You know you are standing on the orb when getDistanceToTarget() is 0.</p>
-   *
-   * <p>Use function moveTo(long id) in ExplorationState to move to a neighboring
-   * tile by its ID. Doing this will change state to reflect your new position.</p>
-   *
-   * <p>A suggested first implementation that will always find the orb, but likely won't
-   * receive a large bonus multiplier, is a depth-first search.</p>
-   *
-   * @param state the information available at the current state
+   * allows the explorer to explore the cavern, trying to find the orb in as
+   * few steps as possible. Once the orb is found the escape phase begins.
+   * @param state the information available at the current state.
    */
   public void explore(final ExplorationState state) {
 
-    //stack to keep track of visited graph nodes
+    //keeps track of visited graph nodes
     final Stack<GraphNode> nodeStack = new Stack<>();
-
-    //graph to keep track of nodes and their connections
+    //keeps track of nodes and their connections
     final ExploreGraph exploreGraph = new ExploreGraphImpl();
-
     //create root node and add to graph and stack
-    GraphNode currentNode = new GraphNodeImpl(state.getCurrentLocation(),
-                                          state.getDistanceToTarget(),
-                                          true);
+    GraphNode currentNode = new GraphNodeImpl(
+            state.getCurrentLocation(),
+            state.getDistanceToTarget(),
+            true
+    );
     exploreGraph.addNode(currentNode);
     nodeStack.push(currentNode);
 
@@ -76,15 +52,7 @@ public class Explorer {
 
       //add and connect the current node's neighbours if they don't exist as nodes
       final Collection<NodeStatus> neighbours = state.getNeighbours();
-      for (final NodeStatus neighbour : neighbours) {
-        if (!exploreGraph.idExists(neighbour.getId())) {
-          final GraphNode newNode = new GraphNodeImpl(neighbour.getId(),
-                                            neighbour.getDistanceToTarget(),
-                                            false);
-          exploreGraph.addNode(newNode);
-          exploreGraph.connectNode(currentNode, newNode);
-        }
-      }
+      exploreGraph.addAndConnectNeighbours(currentNode, neighbours);
 
       //find neighbour nodes that haven't been visited
       final List<GraphNode> unvNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
@@ -100,7 +68,7 @@ public class Explorer {
       } else {
         //if the node has unvisited neighbours find the closest one to the orb
         //update the stack, current node and node status
-        final GraphNode closestNodeToOrb = getClosestNode(unvNeighbours);
+        final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvNeighbours);
         state.moveTo(closestNodeToOrb.getNodeId());
         closestNodeToOrb.setHasBeenVisited(true);
         nodeStack.push(closestNodeToOrb);

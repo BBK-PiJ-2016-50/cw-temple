@@ -1,5 +1,8 @@
 package student;
 
+import game.NodeStatus;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -51,5 +54,19 @@ public interface ExploreGraph {
    * @return a list of neighbour nodes that haven't yet been visited.
    */
   List<GraphNode> getUnvisitedNeighbours(GraphNode node);
+
+  /**
+   * adds and connects a node's neighbours if they don't already
+   * exist as node's in the graph.
+   * @param neighbours the node that the explorer is currently on.
+   */
+  void addAndConnectNeighbours(GraphNode current, Collection<NodeStatus> neighbours);
+
+  /**
+   * finds the node closest to the orb that has not yet been visited.
+   * @param unvNeighbours a list of unvisited neighbours which may be moved to.
+   * @return the unvisited neighbour node that is closest to the orb.
+   */
+  GraphNode getClosestNode(List<GraphNode> unvNeighbours);
 
 }
