@@ -18,20 +18,20 @@ public class ExploreGraphImpl implements ExploreGraph {
   /**
    * list of all nodes that have been added to the graph.
    */
-  private static final List<GraphNode> NodesInGraph = new ArrayList<>();
+  private final List<GraphNode> nodesInGraph = new ArrayList<>();
 
   /**
    * map of each node and their child nodes.
    * provides a complete picture of the graph's node connections.
    */
-  private static final Map<GraphNode, List<GraphNode>> NodeConnections = new ConcurrentHashMap<>();
+  private final Map<GraphNode, List<GraphNode>> nodeConnections = new ConcurrentHashMap<>();
 
   /**
    * {@inheritDoc}.
    */
   @Override
   public List<GraphNode> getNodesInGraph() {
-    return NodesInGraph;
+    return nodesInGraph;
   }
 
   /**
@@ -39,7 +39,7 @@ public class ExploreGraphImpl implements ExploreGraph {
    */
   @Override
   public Map<GraphNode, List<GraphNode>> getNodeConnections() {
-    return NodeConnections;
+    return nodeConnections;
   }
 
   /**
@@ -47,7 +47,7 @@ public class ExploreGraphImpl implements ExploreGraph {
    */
   @Override
   public void addNode(final GraphNode node) {
-    NodesInGraph.add(node);
+    nodesInGraph.add(node);
   }
 
   /**
@@ -55,11 +55,11 @@ public class ExploreGraphImpl implements ExploreGraph {
    */
   @Override
   public void connectNode(final GraphNode parent, final GraphNode child) {
-    List<GraphNode> listOfChildNodes = NodeConnections.get(parent);
+    List<GraphNode> listOfChildNodes = nodeConnections.get(parent);
     if (listOfChildNodes == null) {
       listOfChildNodes = new ArrayList<>();
     }
-    NodeConnections.put(parent, listOfChildNodes);
+    nodeConnections.put(parent, listOfChildNodes);
     listOfChildNodes.add(child);
   }
 
@@ -69,7 +69,7 @@ public class ExploreGraphImpl implements ExploreGraph {
   @Override
   public boolean idExists(final long nodeId) {
     boolean exists = false;
-    for (final GraphNode node : NodesInGraph) {
+    for (final GraphNode node : nodesInGraph) {
       if (node.getNodeId() == nodeId) {
         exists = true;
         break;
@@ -84,7 +84,7 @@ public class ExploreGraphImpl implements ExploreGraph {
   @Override
   public List<GraphNode> getUnvisitedNeighbours(final GraphNode node) {
     final List<GraphNode> unvNeighbours = new ArrayList<>();
-    final List<GraphNode> neighbourNodes = NodeConnections.get(node);
+    final List<GraphNode> neighbourNodes = nodeConnections.get(node);
     if (neighbourNodes != null) {
       for (final GraphNode neighbour : neighbourNodes) {
         if (!neighbour.getHasBeenVisited()) {
