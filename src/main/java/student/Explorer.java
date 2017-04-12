@@ -53,8 +53,9 @@ public class Explorer {
       final Collection<NodeStatus> neighbours = state.getNeighbours();
       exploreGraph.addAndConnectNeighbours(currentNode, neighbours);
 
-      //finds neighbour nodes that haven't been visited and determines where to move next
+      //finds neighbour nodes that haven't been visited
       final List<GraphNode> unvNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
+      //determine where to move next
       if (unvNeighbours.isEmpty()) { //no unvisited neighbours
         nodeStack.pop();
         final GraphNode prevNode = nodeStack.peek();
@@ -73,10 +74,10 @@ public class Explorer {
   }
 
   /**
-   * allows the explorer to escape from the cavern, collecting as much gold as possible
-   * before the ceiling collapses.
-   * time is measured in the number of steps taken, and for each step the time remaining is
-   * decremented by the weight of the edge taken.
+   * allows the explorer to escape from the cavern, collecting as much gold
+   * as possible before the ceiling collapses.
+   * time is measured in the number of steps taken, and for each step the
+   * time remaining is decremented by the weight of the edge taken.
    * the method returns once the exit is reached.
    * @param state the information available at the current state.
    */
