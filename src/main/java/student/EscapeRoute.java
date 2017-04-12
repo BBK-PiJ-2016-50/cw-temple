@@ -30,8 +30,7 @@ public interface EscapeRoute {
 
   /**
    * allows the explorer to look around for gold on nodes that aren't
-   * on the immediate escape route by checking neighbour nodes and their
-   * subsequent neighbour nodes.
+   * on the immediate escape route.
    * a stack is maintained to ensure the explorer can find their way back
    * to the main escape route path.
    * @param state the information available at the current state.

@@ -9,7 +9,9 @@ import game.Tile;
  *
  * @author Ian Robinson
  */
-public class ExplorerHelpers {
+public final class Utils {
+
+  private Utils() { }
 
   /**
    * used in the explore phase.

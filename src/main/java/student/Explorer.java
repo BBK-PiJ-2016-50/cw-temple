@@ -1,8 +1,8 @@
 package student;
 
-import static student.ExplorerHelpers.collectGold;
-import static student.ExplorerHelpers.exitFound;
-import static student.ExplorerHelpers.orbFound;
+import static student.Utils.collectGold;
+import static student.Utils.exitFound;
+import static student.Utils.orbFound;
 
 import game.EscapeState;
 import game.ExplorationState;
