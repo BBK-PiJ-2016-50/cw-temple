@@ -29,7 +29,7 @@ public class EscapeRouteImpl implements EscapeRoute {
   private Map<Node, Node> pathNodes;
 
   /**
-   * map of all visited nodes and the distance to another node.
+   * map of all visited nodes and their distances to other nodes.
    */
   private Map<Node, Integer> distanceToNode;
 
@@ -39,12 +39,12 @@ public class EscapeRouteImpl implements EscapeRoute {
   private Node closestNode;
 
   /**
-   * a set of nodes which haven't been fully evaluated.
+   * a set of nodes which haven't been evaluated.
    */
   private Set<Node> unvisited;
 
   /**
-   * a set of nodes which have been fully evaluated.
+   * a set of nodes which have been evaluated.
    */
   private Set<Node> visited;
 

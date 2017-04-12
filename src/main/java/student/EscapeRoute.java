@@ -15,7 +15,7 @@ import java.util.Queue;
 public interface EscapeRoute {
 
   /**
-   * finds the shortest route from the start node to the exit node.
+   * finds the shortest route from the start node to all other nodes.
    * @param startNode the node that the explorer starts from.
    */
   void findRoute(Node startNode);
