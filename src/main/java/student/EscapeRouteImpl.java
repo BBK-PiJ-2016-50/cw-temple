@@ -34,11 +34,6 @@ public class EscapeRouteImpl implements EscapeRoute {
   private Map<Node, Integer> distanceToNode;
 
   /**
-   * the closest node to a node selected from the unvisited list.
-   */
-  private Node closestNode;
-
-  /**
    * a set of nodes which haven't been evaluated.
    */
   private Set<Node> unvisited;
@@ -49,6 +44,11 @@ public class EscapeRouteImpl implements EscapeRoute {
   private Set<Node> visited;
 
   /**
+   * the closest node to a node selected from the unvisited list.
+   */
+  private Node closestNode;
+
+  /**
    * constructor sets up the framework required for finding
    * the shortest route.
    */
@@ -57,6 +57,7 @@ public class EscapeRouteImpl implements EscapeRoute {
     this.distanceToNode = new HashMap<>();
     this.unvisited = new HashSet<>();
     this.visited = new HashSet<>();
+    this.closestNode = null;
   }
 
   /**
