@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import student.GraphNode;
+import student.GraphNodeImpl;
 
 /**
  * Unit tests for {@see GraphNode}.
@@ -17,7 +18,7 @@ public class GraphNodeTest {
 
   @Before
   public void setUp() {
-     node = new GraphNode(56, 15, false);
+     node = new GraphNodeImpl(56, 15, false);
   }
 
   @Test
