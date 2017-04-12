@@ -26,22 +26,22 @@ public class EscapeRouteImpl implements EscapeRoute {
   /**
    * stores each visited node and the closest node that it is connected to.
    */
-  private Map<Node, Node> pathNodes;
+  private final Map<Node, Node> pathNodes;
 
   /**
    * map of all visited nodes and their distances to other nodes.
    */
-  private Map<Node, Integer> distanceToNode;
+  private final Map<Node, Integer> distanceToNode;
 
   /**
    * a set of nodes which haven't been evaluated.
    */
-  private Set<Node> unvisited;
+  private final Set<Node> unvisited;
 
   /**
    * a set of nodes which have been evaluated.
    */
-  private Set<Node> visited;
+  private final Set<Node> visited;
 
   /**
    * the closest node to a node selected from the unvisited list.
@@ -163,11 +163,11 @@ public class EscapeRouteImpl implements EscapeRoute {
   }
 
   /**
-   * update the shortest distance possible to a neighbour node by looking at all edges.
+   * update the shortest distance possible to a neighbour node.
    * then check if the distance to this neighbour can be reduced.
-   * if it can then the distance is updated and the node is added to the unvisited nodes.
+   * if yes then update distance and add node to unvisited nodes.
    */
-  private void updateShortestDistance(List<Node> unvNeighbours) {
+  private void updateShortestDistance(final List<Node> unvNeighbours) {
     for (final Node neighbour : unvNeighbours) {
       final Edge edge = closestNode.getEdge(neighbour);
       if (getShortestDistance(neighbour) > getShortestDistance(closestNode) + edge.length()) {
