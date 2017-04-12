@@ -99,7 +99,10 @@ public class ExploreGraphImpl implements ExploreGraph {
    * {@inheritDoc}.
    */
   @Override
-  public void addAndConnectNeighbours(GraphNode currentNode, Collection<NodeStatus> neighbours) {
+  public void addAndConnectNeighbours(
+          final GraphNode currentNode,
+          final Collection<NodeStatus> neighbours
+  ) {
     for (final NodeStatus neighbour : neighbours) {
       if (!idExists(neighbour.getId())) {
         final GraphNode newNode = new GraphNodeImpl(
