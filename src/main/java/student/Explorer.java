@@ -6,24 +6,15 @@ import game.EscapeState;
 import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
-import game.Tile;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 /**
  * provides the explorer with the ability to explore and escape from the cavern.
  */
 public class Explorer {
-
-  /**
-   * the time at which to abandon gold collecting in the escape phase.
-   * this allows the explorer to escape whilst there is still time.
-   */
-  private static final int STOP_COLLECTION_TIME = 50;
 
   /**
    * allows the explorer to explore the cavern, trying to find the orb in as
