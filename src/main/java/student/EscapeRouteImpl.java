@@ -1,11 +1,14 @@
 package student;
 
+import static student.Utils.exitFound;
+
 import game.Edge;
 import game.EscapeState;
 import game.Node;
 import game.Tile;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,23 +51,31 @@ public class EscapeRouteImpl implements EscapeRoute {
    */
   private Node closestNode;
 
+  private Node currentNode;
+  private Node exitNode;
+  private Collection<Node> vertices;
+  private int escapeTime;
+
   /**
    * constructor sets up the framework required for finding
    * the shortest route.
    */
-  public EscapeRouteImpl() {
+  public EscapeRouteImpl(Node currentNode, Node exitNode, Collection<Node> vertices, int escapeTime) {
     this.pathNodes = new HashMap<>();
     this.distanceToNode = new HashMap<>();
     this.unvisited = new HashSet<>();
     this.visited = new HashSet<>();
     this.closestNode = null;
+    this.currentNode = currentNode;
+    this.exitNode = exitNode;
+    this.vertices = vertices;
+    this.escapeTime = escapeTime;
   }
 
   /**
    * {@inheritDoc}.
    */
-  @Override
-  public void findRoute(final Node startNode) {
+  private void findRoute(final Node startNode) {
     distanceToNode.put(startNode, 0);
     unvisited.add(startNode);
 
@@ -88,8 +99,7 @@ public class EscapeRouteImpl implements EscapeRoute {
   /**
    * {@inheritDoc}.
    */
-  @Override
-  public List<Node> getRoute(final Node endNode) {
+  private List<Node> getRoute(final Node endNode) {
     final List<Node> route = new LinkedList<>();
     Node nextNode = endNode;
     route.add(nextNode);
@@ -102,35 +112,41 @@ public class EscapeRouteImpl implements EscapeRoute {
     return route;
   }
 
-  /**
-   * {@inheritDoc}.
-   */
   @Override
-  public void lookAroundForGold(
-          final EscapeState state,
-          final Queue<Node> pathToTake,
-          final Node pathNode
-  ) {
-    final Stack<Node> goldTrail = new Stack<>();
-    for (final Node neighbour : pathNode.getNeighbours()) {
-      goldTrail.push(pathNode);
-      Node current = neighbour;
-      final Tile currentTile = current.getTile();
-      //if the current tile has gold, and isn't part of the pathToTake
-      //then move to tile and pick up the gold
-      while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
-        state.moveTo(current);
-        state.pickUpGold();
-        goldTrail.push(current);
-        current = current.getNeighbours().iterator().next();
-      }
-      //move back to original escape route
-      goldTrail.pop();
-      while (!goldTrail.isEmpty()) {
-        state.moveTo(goldTrail.pop());
-      }
-    }
+  public List<Node> bestGoldRoute() {
+    findRoute(currentNode);
+    return getRoute(exitNode);
   }
+
+//  /**
+//   * {@inheritDoc}.
+//   */
+//  @Override
+//  public void lookAroundForGold(
+//          final EscapeState state,
+//          final Queue<Node> pathToTake,
+//          final Node pathNode
+//  ) {
+//    final Stack<Node> goldTrail = new Stack<>();
+//    for (final Node neighbour : pathNode.getNeighbours()) {
+//      goldTrail.push(pathNode);
+//      Node current = neighbour;
+//      final Tile currentTile = current.getTile();
+//      //if the current tile has gold, and isn't part of the pathToTake
+//      //then move to tile and pick up the gold
+//      while (currentTile.getGold() > 0 && !pathToTake.contains(current)) {
+//        state.moveTo(current);
+//        state.pickUpGold();
+//        goldTrail.push(current);
+//        current = current.getNeighbours().iterator().next();
+//      }
+//      //move back to original escape route
+//      goldTrail.pop();
+//      while (!goldTrail.isEmpty()) {
+//        state.moveTo(goldTrail.pop());
+//      }
+//    }
+//  }
 
   /**
    * find the node closest to the currentNode picked from the unvisited list.
@@ -190,6 +206,30 @@ public class EscapeRouteImpl implements EscapeRoute {
       dist = Integer.MAX_VALUE;
     }
     return dist;
+  }
+
+  @Override
+  public void takeRoute(List<Node> escapeRoute, EscapeState state) {
+    Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
+    Node startNode = pathToTake.remove();
+    Node pathNode;
+    collectGold(startNode.getTile(), state);
+    while (!exitFound(state)) {
+      pathNode = pathToTake.remove();
+      state.moveTo(pathNode);
+      collectGold(pathNode.getTile(), state);
+    }
+  }
+
+  /**
+   * picks up gold from a tile.
+   * @param tile the tile to pick gold up from.
+   * @param state the state of the escape phase.
+   */
+  private void collectGold(final Tile tile, final EscapeState state) {
+    if (tile.getGold() > 0) {
+      state.pickUpGold();
+    }
   }
 
 }

@@ -33,16 +33,16 @@ public final class Utils {
     return state.getExit() == state.getCurrentNode();
   }
 
-  /**
-   * used in the escape phase.
-   * picks up gold from a tile.
-   * @param tile the tile to pick gold up from.
-   * @param state the state of the escape phase.
-   */
-  public static void collectGold(final Tile tile, final EscapeState state) {
-    if (tile.getGold() > 0) {
-      state.pickUpGold();
-    }
-  }
+//  /**
+//   * used in the escape phase.
+//   * picks up gold from a tile.
+//   * @param tile the tile to pick gold up from.
+//   * @param state the state of the escape phase.
+//   */
+//  public static void collectGold(final Tile tile, final EscapeState state) {
+//    if (tile.getGold() > 0) {
+//      state.pickUpGold();
+//    }
+//  }
 
 }
