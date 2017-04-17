@@ -81,7 +81,6 @@ public class Explorer {
    */
   public void escape(final EscapeState state) {
 
-    //create a new escape route to the exit node
     final EscapeRoute escapeRoute = new EscapeRouteImpl(
             state.getCurrentNode(),
             state.getExit(),
@@ -90,43 +89,6 @@ public class Explorer {
     );
     List<Node> optimalGoldRoute = escapeRoute.bestGoldRoute();
     escapeRoute.takeRoute(optimalGoldRoute, state);
-
-//    escapeRoute.findRoute(state.getCurrentNode());
-//
-//    int totalTime = state.getTimeRemaining();
-//    int timeFromCurrentNode = totalTime;
-//
-//    while (timeFromCurrentNode < totalTime) {
-//      final List<Node> shortestRoute = escapeRoute.getRoute(state.getExit());
-//      int distance = 0;
-//      for (Node n : shortestRoute) {
-//
-//      }
-//    }
-
-//    final List<Node> shortestRoute = escapeRoute.getRoute(state.getExit());
-//    final Queue<Node> pathToTake = new LinkedList<>(shortestRoute);
-//
-//    //begin taking the escape route path
-//    final Node startNode = pathToTake.remove();
-//    final Tile startTile = startNode.getTile();
-//    collectGold(startTile, state);
-//
-//    while (!exitFound(state)) {
-//
-//      //move to the next node in the path
-//      final Node pathNode = pathToTake.remove();
-//      final Tile pathTile = pathNode.getTile();
-//      state.moveTo(pathNode);
-//      collectGold(pathTile, state);
-//
-//      //look for additional gold
-//      if (state.getTimeRemaining() > STOP_COLLECTION_TIME) {
-//        escapeRoute.lookAroundForGold(state, pathToTake, pathNode);
-//      }
-//
-//    }
-
   }
 
 }
