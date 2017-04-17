@@ -117,8 +117,10 @@ public class EscapeRouteImpl implements EscapeRoute {
 
     List<Node> bestRoute = new LinkedList<>(); //this gets added to
     int remainingTime = escapeTime; //this gets decremented
+
     boolean goToExit = false;
     while (!goToExit) {
+      System.out.println(remainingTime);
       //find closest node with gold
       Node bestNode = vertices.iterator().next();
       for (Node n : vertices) {
@@ -130,21 +132,33 @@ public class EscapeRouteImpl implements EscapeRoute {
       List<Node> routeToNode = getRoute(bestNode);
       //work out time it would take to get to the node
       int timeToNode = 0;
-      for (int i = 0; i < routeToNode.size(); i++) {
+      for (int i = 0; i < routeToNode.size() - 1; i++) {
         Node curNode = routeToNode.get(i);
         Node nextNode = routeToNode.get(i + 1);
         timeToNode += curNode.getEdge(nextNode).length();
       }
-
+      System.out.println(timeToNode);
       //work out time it would take to get to the exit from the node with gold
+      List<Node> routeToExit = getRoute(exitNode);
+      int timeToExit = 0;
+      for (int i = 0; i < routeToExit.size() - 1; i++) {
+        Node curNode = routeToExit.get(i);
+        Node nextNode = routeToExit.get(i + 1);
+        timeToExit += curNode.getEdge(nextNode).length();
+      }
       //add these together
+      int totalTime = timeToNode + timeToExit;
       //if this total comes to more than the time remaining then get the route to the exit and add it to the route list
-      //else add the route to the route list
-      //subtract the time it took to get to the node with gold from the total time
-
+      if (totalTime > remainingTime) {
+        bestRoute.addAll(routeToExit);
+        goToExit = true;
+      } else {
+        //else add the route to the route list
+        bestRoute.addAll(routeToNode);
+        //subtract the time it took to get to the node with gold from the total time
+        remainingTime -= timeToNode;
+      }
     }
-
-
     return bestRoute;
 
     //findRoute(currentNode);
