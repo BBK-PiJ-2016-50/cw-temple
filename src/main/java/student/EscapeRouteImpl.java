@@ -114,8 +114,41 @@ public class EscapeRouteImpl implements EscapeRoute {
 
   @Override
   public List<Node> bestGoldRoute() {
-    findRoute(currentNode);
-    return getRoute(exitNode);
+
+    List<Node> bestRoute = new LinkedList<>(); //this gets added to
+    int remainingTime = escapeTime; //this gets decremented
+    boolean goToExit = false;
+    while (!goToExit) {
+      //find closest node with gold
+      Node bestNode = vertices.iterator().next();
+      for (Node n : vertices) {
+        if (n.getTile().getGold() > bestNode.getTile().getGold()) {
+          bestNode = n;
+        }
+      }
+      //find the route to that node
+      List<Node> routeToNode = getRoute(bestNode);
+      //work out time it would take to get to the node
+      int timeToNode = 0;
+      for (int i = 0; i < routeToNode.size(); i++) {
+        Node curNode = routeToNode.get(i);
+        Node nextNode = routeToNode.get(i + 1);
+        timeToNode += curNode.getEdge(nextNode).length();
+      }
+
+      //work out time it would take to get to the exit from the node with gold
+      //add these together
+      //if this total comes to more than the time remaining then get the route to the exit and add it to the route list
+      //else add the route to the route list
+      //subtract the time it took to get to the node with gold from the total time
+
+    }
+
+
+    return bestRoute;
+
+    //findRoute(currentNode);
+    //return getRoute(exitNode);
   }
 
 //  /**
