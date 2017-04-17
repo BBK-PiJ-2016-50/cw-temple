@@ -6,10 +6,7 @@ import game.EscapeState;
 import game.Node;
 import game.Tile;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Implementation of {@see EscapeRoute}.
@@ -38,24 +35,30 @@ public class EscapeRouteImpl implements EscapeRoute {
   public List<Node> bestGoldRoute() {
 
     List<Node> bestRoute = new LinkedList<>(); //this gets added to
+    Set<Node> visited = new HashSet<>(); //stores nodes that have already been validated for gold
     int remainingTime = escapeTime; //this gets decremented
     Node currentNode = startNode;
 
+    bestRoute.add(currentNode);
+
     boolean goToExit = false;
     while (!goToExit) {
+      //System.out.println(remainingTime);
       ShortestPathUtils pathUtils = new ShortestPathUtils();
       pathUtils.findRoute(currentNode); //get all routes from current node
       //find closest node with gold
       Node closestGoldNode = vertices.iterator().next();
-      int bestTimeToNode = 0;
+      int bestTimeToNode = 100000;
       for (Node n : vertices) {
-        //find the route to that node
-        List<Node> routeToNode = pathUtils.getRoute(n);
-        //work out time it would take to get to the node
-        int time = timeToNode(routeToNode);
-        if (time <= bestTimeToNode) {
-          bestTimeToNode = time;
-          closestGoldNode = n;
+        //ensure only nodes that have not been checked and that have gold are validated
+        if (!visited.contains(n) && n.getTile().getGold() > 0) {
+          List<Node> routeToNode = pathUtils.getRoute(n);
+          //work out time it would take to get to the node
+          int time = timeToNode(routeToNode);
+          if (time <= bestTimeToNode) {
+            bestTimeToNode = time;
+            closestGoldNode = n;
+          }
         }
       }
       //work out time it would take to get to the exit from the node with gold
@@ -65,12 +68,19 @@ public class EscapeRouteImpl implements EscapeRoute {
       int totalTime = bestTimeToNode + timeToExit;
       //if this total comes to more than the time remaining then get the route to the exit and add it to the route list
       if (totalTime > remainingTime) {
-        bestRoute.addAll(routeToExit);
+        for (int i = 1; i < routeToExit.size(); i++) {
+          bestRoute.add(routeToExit.get(i));
+        }
+        //bestRoute.addAll(routeToExit);
         goToExit = true;
       } else {
         //else add the route to the route list
         List<Node> routeToNode = pathUtils.getRoute(closestGoldNode);
-        bestRoute.addAll(routeToNode);
+        for (int i = 1; i < routeToNode.size(); i++) {
+          bestRoute.add(routeToNode.get(i));
+        }
+        //bestRoute.addAll(routeToNode); //adds the nodes to the route
+        visited.addAll(routeToNode); //ensures nodes that have been checked are not checked again
         //subtract the time it took to get to the node with gold from the total time
         remainingTime -= bestTimeToNode;
         currentNode = closestGoldNode;
@@ -92,6 +102,9 @@ public class EscapeRouteImpl implements EscapeRoute {
   @Override
   public void takeRoute(List<Node> escapeRoute, EscapeState state) {
     Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
+    for (Node p : pathToTake) {
+      System.out.println(p.getId());
+    }
     Node startNode = pathToTake.remove();
     Node pathNode;
     collectGold(startNode.getTile(), state);
