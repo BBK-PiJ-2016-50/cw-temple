@@ -33,6 +33,8 @@ public class EscapeRouteImpl implements EscapeRoute {
 
   @Override
   public List<Node> bestGoldRoute() {
+    //somewhere i'm not cutting enough time off the remaining time
+    //causes the explorer to not get to the exit in time on some occasions
 
     List<Node> bestRoute = new LinkedList<>(); //this gets added to
     Set<Node> visited = new HashSet<>(); //stores nodes that have already been validated for gold
@@ -43,7 +45,6 @@ public class EscapeRouteImpl implements EscapeRoute {
 
     boolean goToExit = false;
     while (!goToExit) {
-      //System.out.println(remainingTime);
       ShortestPathUtils pathUtils = new ShortestPathUtils();
       pathUtils.findRoute(currentNode); //get all routes from current node
       //find closest node with gold
@@ -71,19 +72,19 @@ public class EscapeRouteImpl implements EscapeRoute {
         for (int i = 1; i < routeToExit.size(); i++) {
           bestRoute.add(routeToExit.get(i));
         }
-        //bestRoute.addAll(routeToExit);
         goToExit = true;
       } else {
-        //else add the route to the route list
+
+        currentNode = closestGoldNode;
+        //else add the route to the route list minus the first node
+        //this is because otherwise the same node could be added twice to the escape route
         List<Node> routeToNode = pathUtils.getRoute(closestGoldNode);
         for (int i = 1; i < routeToNode.size(); i++) {
           bestRoute.add(routeToNode.get(i));
         }
-        //bestRoute.addAll(routeToNode); //adds the nodes to the route
         visited.addAll(routeToNode); //ensures nodes that have been checked are not checked again
         //subtract the time it took to get to the node with gold from the total time
         remainingTime -= bestTimeToNode;
-        currentNode = closestGoldNode;
       }
     }
     return bestRoute;
@@ -102,9 +103,6 @@ public class EscapeRouteImpl implements EscapeRoute {
   @Override
   public void takeRoute(List<Node> escapeRoute, EscapeState state) {
     Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
-    for (Node p : pathToTake) {
-      System.out.println(p.getId());
-    }
     Node startNode = pathToTake.remove();
     Node pathNode;
     collectGold(startNode.getTile(), state);
