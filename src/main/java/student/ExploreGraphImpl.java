@@ -131,6 +131,10 @@ public class ExploreGraphImpl implements ExploreGraph {
     return closestNode;
   }
 
+  /**
+   * {@inheritDoc}.
+   */
+  @Override
   public boolean orbFound(final ExplorationState state) {
     return state.getDistanceToTarget() == 0;
   }
