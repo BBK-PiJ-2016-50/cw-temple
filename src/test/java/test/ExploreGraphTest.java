@@ -6,18 +6,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import game.Node;
 import game.NodeStatus;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import searchexample.Graph;
 import student.ExploreGraph;
 import student.ExploreGraphImpl;
 import student.GraphNode;
 import student.GraphNodeImpl;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +24,6 @@ import java.util.List;
  *
  * @author Ian Robinson
  */
-@RunWith(MockitoJUnitRunner.class)
 public class ExploreGraphTest {
 
   private ExploreGraph graph;
