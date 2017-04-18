@@ -42,6 +42,7 @@ public class EscapeRouteImpl implements EscapeRoute {
     Node currentNode = startNode;
 
     bestRoute.add(currentNode);
+    visited.add(currentNode);
 
     boolean goToExit = false;
     while (!goToExit) {
@@ -49,7 +50,7 @@ public class EscapeRouteImpl implements EscapeRoute {
       pathUtils.findRoute(currentNode); //get all routes from current node
       //find closest node with gold
       Node closestGoldNode = vertices.iterator().next();
-      int bestTimeToNode = 100000;
+      int bestTimeToNode = Integer.MAX_VALUE;  //start off with infinite value
       for (Node n : vertices) {
         //ensure only nodes that have not been checked and that have gold are validated
         if (!visited.contains(n) && n.getTile().getGold() > 0) {
