@@ -1,5 +1,6 @@
 package student;
 
+import game.ExplorationState;
 import game.NodeStatus;
 
 import java.util.Collection;
@@ -70,5 +71,12 @@ public interface ExploreGraph {
    * @return the unvisited neighbour node that is closest to the orb.
    */
   GraphNode getClosestNode(List<GraphNode> unvNeighbours);
+
+  /**
+   * checks to see if orb found.  Orb is found if distance to target is 0.
+   * @param state the information available at the current state.
+   * @return boolean indicating whether the orb has been found or not.
+   */
+  boolean orbFound(ExplorationState state);
 
 }

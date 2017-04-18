@@ -1,5 +1,6 @@
 package student;
 
+import game.ExplorationState;
 import game.NodeStatus;
 
 import java.util.ArrayList;
@@ -128,6 +129,10 @@ public class ExploreGraphImpl implements ExploreGraph {
       }
     }
     return closestNode;
+  }
+
+  public boolean orbFound(final ExplorationState state) {
+    return state.getDistanceToTarget() == 0;
   }
 
 }

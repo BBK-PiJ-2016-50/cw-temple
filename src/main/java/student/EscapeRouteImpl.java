@@ -1,7 +1,5 @@
 package student;
 
-import static student.Utils.exitFound;
-
 import game.EscapeState;
 import game.Node;
 import game.Tile;
@@ -126,4 +124,10 @@ public class EscapeRouteImpl implements EscapeRoute {
     }
   }
 
+  /**
+   *
+   */
+  public boolean exitFound(final EscapeState state) {
+    return state.getExit() == state.getCurrentNode();
+  }
 }

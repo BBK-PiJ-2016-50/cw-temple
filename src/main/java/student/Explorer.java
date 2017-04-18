@@ -1,7 +1,5 @@
 package student;
 
-import static student.Utils.orbFound;
-
 import game.EscapeState;
 import game.ExplorationState;
 import game.Node;
@@ -36,7 +34,7 @@ public class Explorer {
     exploreGraph.addNode(currentNode);
     nodeStack.push(currentNode);
 
-    while (!orbFound(state)) {
+    while (!exploreGraph.orbFound(state)) {
 
       //adds and connects the current node's neighbours
       final Collection<NodeStatus> neighbours = state.getNeighbours();
