@@ -43,7 +43,7 @@ public class EscapeRouteImpl implements EscapeRoute {
     visited.add(currentNode);
     boolean goToExit = false;
     while (!goToExit) {
-      ShortestPathUtils pathUtils = new ShortestPathUtils();
+      EscapeRouteUtils pathUtils = new EscapeRouteUtils();
       pathUtils.findRoute(currentNode); //get all routes from current node
       //find closest node with gold
       Node closestGoldNode = vertices.iterator().next();
@@ -62,7 +62,7 @@ public class EscapeRouteImpl implements EscapeRoute {
         }
       }
       //work out time it would take to get to the exit from the node with gold
-      ShortestPathUtils pathUtilsToExit = new ShortestPathUtils();
+      EscapeRouteUtils pathUtilsToExit = new EscapeRouteUtils();
       pathUtilsToExit.findRoute(closestGoldNode); //get all routes from best gold node
       List<Node> routeToExit = pathUtilsToExit.getRoute(exitNode);
       int timeToExit = timeToNode(routeToExit);
