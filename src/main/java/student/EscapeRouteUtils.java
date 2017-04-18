@@ -1,11 +1,21 @@
 package student;
 
-
 import game.Edge;
 import game.Node;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+/**
+ * a set of tools for constructing a set of shortest possible routes from
+ * a given start point.
+ */
 public class EscapeRouteUtils {
 
   /**
@@ -45,7 +55,16 @@ public class EscapeRouteUtils {
     this.closestNode = null;
   }
 
+  /**
+   * finds all shortest possible routes from the current node to every other
+   * available node on the map.  The shortest distances are stored in a map
+   * which is then used by the {@see getRoute} method to construct a route to
+   * a specified node.
+   * @param startNode the node from which routes to all other nodes will be
+   *                  calculated.
+   */
   public void findRoute(final Node startNode) {
+
     distanceToNode.put(startNode, 0);
     unvisited.add(startNode);
 
@@ -64,24 +83,33 @@ public class EscapeRouteUtils {
       updateShortestDistance(unvNeighbours);
 
     }
+
   }
 
   /**
-   * {@inheritDoc}.
+   * returns the shortest path between the current node and the specified
+   * end node.
+   * @param endNode the node to which the shortest path should be built.
+   * @return a list of nodes representing the shortest path between the
+   *         current node and the end node.
    */
   public List<Node> getRoute(final Node endNode) {
+
     final List<Node> route = new LinkedList<>();
     Node nextNode = endNode;
-    route.add(nextNode);
+    route.add(nextNode); //add the end node first
+
+    //build the route in reverse order from end to start
     while (pathNodes.get(nextNode) != null) {
       nextNode = pathNodes.get(nextNode);
       route.add(nextNode);
     }
+
     //ensure the path is returned with the start node first
     Collections.reverse(route);
     return route;
-  }
 
+  }
 
   /**
    * find the node closest to the currentNode picked from the unvisited list.
