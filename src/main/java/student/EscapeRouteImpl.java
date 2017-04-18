@@ -41,6 +41,11 @@ public class EscapeRouteImpl implements EscapeRoute {
   private int escapeTime;
 
   /**
+   * the best route for the explorer to take when escaping the cavern.
+   */
+  private List<Node> bestRoute;
+
+  /**
    * constructor sets up the framework required for finding the best route
    * out of the cavern within time, whilst collecting as much gold as possible.
    */
@@ -54,6 +59,7 @@ public class EscapeRouteImpl implements EscapeRoute {
     this.exitNode = exitNode;
     this.vertices = vertices;
     this.escapeTime = escapeTime;
+    this.bestRoute = new LinkedList<>();
   }
 
   /**
@@ -62,58 +68,63 @@ public class EscapeRouteImpl implements EscapeRoute {
   @Override
   public List<Node> bestGoldRoute() {
 
-    List<Node> bestRoute = new LinkedList<>(); //this gets added to
-    Set<Node> visited = new HashSet<>(); //stores nodes that have already been validated for gold
-    int remainingTime = escapeTime; //this gets decremented
-    Node currentNode = startNode;
+    //stores nodes that have already been validated for gold.
+    Set<Node> visited = new HashSet<>();
 
+    //used to work out if explorer should abandon gold collection.
+    int remainingTime = escapeTime;
+
+    //define and add the current node to the route.
+    Node currentNode = startNode;
     bestRoute.add(currentNode);
     visited.add(currentNode);
+
     boolean goToExit = false;
     while (!goToExit) {
-      EscapeRouteUtils pathUtils = new EscapeRouteUtils();
-      pathUtils.findRoute(currentNode); //get all routes from current node
-      //find closest node with gold
+
+      //get all paths from current node to all other nodes.
+      EscapeRouteUtils curNodePaths = new EscapeRouteUtils();
+      curNodePaths.findRoute(currentNode);
+
+      //find closest node with gold from current position.
       Node closestGoldNode = vertices.iterator().next();
-      int bestTimeToNode = Integer.MAX_VALUE;  //start off with infinite value
+      int bestTimeToNode = Integer.MAX_VALUE;  //start off with max value.
       for (Node n : vertices) {
         //ensure only nodes that have not been checked and that have gold are validated
         if (!visited.contains(n) && n.getTile().getGold() > 0) {
-          List<Node> routeToNode = pathUtils.getRoute(n);
+          List<Node> routeToNode = curNodePaths.getRoute(n);
           //work out time it would take to get to the node
           int time = timeToNode(routeToNode);
           if (time <= bestTimeToNode) {
             bestTimeToNode = time;
             closestGoldNode = n;
           }
-
         }
       }
-      //work out time it would take to get to the exit from the node with gold
+
+      //check how long it would take to get to the exit from the closestGoldNode
       EscapeRouteUtils pathUtilsToExit = new EscapeRouteUtils();
-      pathUtilsToExit.findRoute(closestGoldNode); //get all routes from best gold node
+      pathUtilsToExit.findRoute(closestGoldNode);
       List<Node> routeToExit = pathUtilsToExit.getRoute(exitNode);
       int timeToExit = timeToNode(routeToExit);
-      //add these times together
+
+      //add times to find out if the route is doable before time runs out.
       int totalTime = bestTimeToNode + timeToExit;
-      //if this total comes to more than the time remaining then get the route to the exit and add it to the route list
-      List<Node> getOutNow = pathUtils.getRoute(exitNode);
+
+      //head to exit straight away if the route to the next gold node is not
+      //achievable, or if there are no nodes remaining with gold.
+      List<Node> getOutNow = curNodePaths.getRoute(exitNode);
       if (totalTime > remainingTime || bestTimeToNode == Integer.MAX_VALUE) {
-        for (int i = 1; i < getOutNow.size(); i++) {
-          bestRoute.add(getOutNow.get(i));
-        }
+        addNodesToRoute(getOutNow);
         goToExit = true;
       } else {
-
+        //if doable then get the route to the node and add to the bestRoute.
         currentNode = closestGoldNode;
-        //else add the route to the route list minus the first node
-        //this is because otherwise the same node could be added twice to the escape route
-        List<Node> routeToNode = pathUtils.getRoute(closestGoldNode);
-        for (int i = 1; i < routeToNode.size(); i++) {
-          bestRoute.add(routeToNode.get(i));
-        }
-        visited.addAll(routeToNode); //ensures nodes that have been checked are not checked again
-        //subtract the time it took to get to the node with gold from the total time
+        List<Node> routeToNode = curNodePaths.getRoute(closestGoldNode);
+        addNodesToRoute(routeToNode);
+        //ensures nodes that have been assessed are not checked again.
+        visited.addAll(routeToNode);
+        //update the remaining time
         remainingTime -= bestTimeToNode;
       }
     }
@@ -125,15 +136,18 @@ public class EscapeRouteImpl implements EscapeRoute {
    */
   @Override
   public void takeRoute(List<Node> escapeRoute, EscapeState state) {
+
     Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
     Node startNode = pathToTake.remove();
     Node pathNode;
     collectGold(startNode.getTile(), state);
+
     while (!exitFound(state)) {
       pathNode = pathToTake.remove();
       state.moveTo(pathNode);
       collectGold(pathNode.getTile(), state);
     }
+
   }
 
   /**
@@ -160,6 +174,18 @@ public class EscapeRouteImpl implements EscapeRoute {
       timeToNode += curNode.getEdge(nextNode).length();
     }
     return timeToNode;
+  }
+
+  /**
+   * this adds the nodes to the bestRoute list.
+   * the first node is not added as otherwise it would be duplicated in the
+   * escape route and the explorer wouldn't be able to move.
+   * @param route the list of nodes to add to the bestRoute.
+   */
+  private void addNodesToRoute(List<Node> route) {
+    for (int i = 1; i < route.size(); i++) {
+      bestRoute.add(route.get(i));
+    }
   }
 
   /**
