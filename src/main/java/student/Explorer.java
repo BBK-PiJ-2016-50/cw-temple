@@ -23,8 +23,10 @@ public class Explorer {
 
     //keeps track of visited graph nodes
     final Stack<GraphNode> nodeStack = new Stack<>();
+
     //keeps track of graph nodes and their connections
     final ExploreGraph exploreGraph = new ExploreGraphImpl();
+
     //creates root node and adds to graph and stack
     GraphNode currentNode = new GraphNodeImpl(
             state.getCurrentLocation(),
@@ -42,13 +44,14 @@ public class Explorer {
 
       //finds neighbour nodes that haven't been visited
       final List<GraphNode> unvNeighbours = exploreGraph.getUnvisitedNeighbours(currentNode);
+
       //determine where to move next
-      if (unvNeighbours.isEmpty()) { //no unvisited neighbours
+      if (unvNeighbours.isEmpty()) { //if no unvisited neighbours then go back
         nodeStack.pop();
         final GraphNode prevNode = nodeStack.peek();
         state.moveTo(prevNode.getNodeId());
         currentNode = prevNode;
-      } else { //there are unvisited neighbours
+      } else { //if there are unvisited neighbours find best on to move to
         final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvNeighbours);
         state.moveTo(closestNodeToOrb.getNodeId());
         closestNodeToOrb.setHasBeenVisited(true);
@@ -70,14 +73,19 @@ public class Explorer {
    */
   public void escape(final EscapeState state) {
 
+    //create the escape route
     final EscapeRoute escapeRoute = new EscapeRouteImpl(
             state.getCurrentNode(),
             state.getExit(),
             state.getVertices(),
             state.getTimeRemaining()
     );
-    List<Node> optimalGoldRoute = escapeRoute.bestGoldRoute();
-    escapeRoute.takeRoute(optimalGoldRoute, state);
+
+    //work out the best route for gold
+    List<Node> bestGoldRoute = escapeRoute.bestGoldRoute();
+
+    //follow this route and escape the cavern
+    escapeRoute.takeRoute(bestGoldRoute, state);
   }
 
 }
