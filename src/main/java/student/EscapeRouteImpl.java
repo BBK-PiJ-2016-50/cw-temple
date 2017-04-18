@@ -33,8 +33,6 @@ public class EscapeRouteImpl implements EscapeRoute {
 
   @Override
   public List<Node> bestGoldRoute() {
-    //somewhere i'm not cutting enough time off the remaining time
-    //causes the explorer to not get to the exit in time on some occasions
 
     List<Node> bestRoute = new LinkedList<>(); //this gets added to
     Set<Node> visited = new HashSet<>(); //stores nodes that have already been validated for gold
@@ -43,7 +41,6 @@ public class EscapeRouteImpl implements EscapeRoute {
 
     bestRoute.add(currentNode);
     visited.add(currentNode);
-
     boolean goToExit = false;
     while (!goToExit) {
       ShortestPathUtils pathUtils = new ShortestPathUtils();
@@ -61,6 +58,7 @@ public class EscapeRouteImpl implements EscapeRoute {
             bestTimeToNode = time;
             closestGoldNode = n;
           }
+
         }
       }
       //work out time it would take to get to the exit from the node with gold
@@ -72,7 +70,7 @@ public class EscapeRouteImpl implements EscapeRoute {
       int totalTime = bestTimeToNode + timeToExit;
       //if this total comes to more than the time remaining then get the route to the exit and add it to the route list
       List<Node> getOutNow = pathUtils.getRoute(exitNode);
-      if (totalTime > remainingTime) {
+      if (totalTime > remainingTime || bestTimeToNode == Integer.MAX_VALUE) {
         for (int i = 1; i < getOutNow.size(); i++) {
           bestRoute.add(getOutNow.get(i));
         }
