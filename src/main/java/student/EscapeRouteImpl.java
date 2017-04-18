@@ -64,14 +64,17 @@ public class EscapeRouteImpl implements EscapeRoute {
         }
       }
       //work out time it would take to get to the exit from the node with gold
-      List<Node> routeToExit = pathUtils.getRoute(exitNode);
+      ShortestPathUtils pathUtilsToExit = new ShortestPathUtils();
+      pathUtilsToExit.findRoute(closestGoldNode); //get all routes from best gold node
+      List<Node> routeToExit = pathUtilsToExit.getRoute(exitNode);
       int timeToExit = timeToNode(routeToExit);
       //add these times together
       int totalTime = bestTimeToNode + timeToExit;
       //if this total comes to more than the time remaining then get the route to the exit and add it to the route list
+      List<Node> getOutNow = pathUtils.getRoute(exitNode);
       if (totalTime > remainingTime) {
-        for (int i = 1; i < routeToExit.size(); i++) {
-          bestRoute.add(routeToExit.get(i));
+        for (int i = 1; i < getOutNow.size(); i++) {
+          bestRoute.add(getOutNow.get(i));
         }
         goToExit = true;
       } else {
