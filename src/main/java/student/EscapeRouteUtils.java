@@ -6,7 +6,7 @@ import game.Node;
 
 import java.util.*;
 
-public class ShortestPathUtils {
+public class EscapeRouteUtils {
 
   /**
    * stores each visited node and the closest node that it is connected to.
@@ -37,7 +37,7 @@ public class ShortestPathUtils {
    * constructor sets up the framework required for finding
    * the shortest route.
    */
-  public ShortestPathUtils() {
+  public EscapeRouteUtils() {
     this.pathNodes = new HashMap<>();
     this.distanceToNode = new HashMap<>();
     this.unvisited = new HashSet<>();
