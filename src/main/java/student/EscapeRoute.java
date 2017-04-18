@@ -4,17 +4,34 @@ import game.EscapeState;
 import game.Node;
 
 import java.util.List;
-import java.util.Queue;
 
 /**
  * builds up a picture of the map for use when escaping using
  * Dijkstra's algorithm.  This find the shortest distance between two points.
+ * the algorithm is then employed to find an optimal route for exiting the
+ * cavern whilst finding as much gold as possible.
+ * see {@see EscapeRouteUtils} for Dijkstra methods.
  *
  * @author Ian Robinson
  */
 public interface EscapeRoute {
 
+  /**
+   * puts together a list of nodes that will allow the explorer to gather
+   * as much gold as possible and still make it out of the cavern in time.
+   * This method makes use of dijkstra's algorithm to put together the route.
+   * @return a list of nodes constituting an optimal route for escaping
+   *          whilst collecting as much gold as possible.
+   */
   List<Node> bestGoldRoute();
+
+  /**
+   * executes the route to take whilst escaping.
+   * this performs both movement of the explorer from node to node as well as
+   * picking up the gold.
+   * @param escapeRoute the list of nodes that constitutes the escape route.
+   * @param state the current state of the escape phase.
+   */
   void takeRoute(List<Node> escapeRoute, EscapeState state);
 
   /**
