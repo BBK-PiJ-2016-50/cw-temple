@@ -4,7 +4,12 @@ import game.EscapeState;
 import game.Node;
 import game.Tile;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * Implementation of {@see EscapeRoute}.
@@ -13,22 +18,47 @@ import java.util.*;
  */
 public class EscapeRouteImpl implements EscapeRoute {
 
+  /**
+   * the node that the explorer starts from when escaping.
+   */
   private Node startNode;
+
+  /**
+   * the node the explorer needs to get to in order to escape.
+   */
   private Node exitNode;
+
+  /**
+   * a collection of all nodes that make up the escape map.
+   * provides information about gold and therefore which route to take
+   * when escaping.
+   */
   private Collection<Node> vertices;
+
+  /**
+   * the time given to the explorer in which to escape from the cavern.
+   */
   private int escapeTime;
 
   /**
-   * constructor sets up the framework required for finding
-   * the shortest route.
+   * constructor sets up the framework required for finding the best route
+   * out of the cavern within time, whilst collecting as much gold as possible.
    */
-  public EscapeRouteImpl(Node startNode, Node exitNode, Collection<Node> vertices, int escapeTime) {
+  public EscapeRouteImpl(
+          Node startNode,
+          Node exitNode,
+          Collection<Node> vertices,
+          int escapeTime
+  ) {
     this.startNode = startNode;
     this.exitNode = exitNode;
     this.vertices = vertices;
     this.escapeTime = escapeTime;
   }
 
+  /**
+   * {@inheritDoc}.
+   */
   @Override
   public List<Node> bestGoldRoute() {
 
@@ -90,16 +120,9 @@ public class EscapeRouteImpl implements EscapeRoute {
     return bestRoute;
   }
 
-  private int timeToNode(List<Node> route) {
-    int timeToNode = 0;
-    for (int i = 0; i < route.size() - 1; i++) {
-      Node curNode = route.get(i);
-      Node nextNode = route.get(i + 1);
-      timeToNode += curNode.getEdge(nextNode).length();
-    }
-    return timeToNode;
-  }
-
+  /**
+   * {@inheritDoc}.
+   */
   @Override
   public void takeRoute(List<Node> escapeRoute, EscapeState state) {
     Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
@@ -114,6 +137,32 @@ public class EscapeRouteImpl implements EscapeRoute {
   }
 
   /**
+   * {@inheritDoc}.
+   */
+  @Override
+  public boolean exitFound(final EscapeState state) {
+    return state.getExit() == state.getCurrentNode();
+  }
+
+  /**
+   * works out the time it would take to traverse the map from one node to
+   * another.  The time is based on the weights associated with each edge.
+   * @param route the list of nodes from the current node to the end node
+   *              for which the time will be calculated.
+   * @return the time it would take, based on the sum of the edges, to traverse
+   *         the map from the start node to the end node.
+   */
+  private int timeToNode(List<Node> route) {
+    int timeToNode = 0;
+    for (int i = 0; i < route.size() - 1; i++) {
+      Node curNode = route.get(i);
+      Node nextNode = route.get(i + 1);
+      timeToNode += curNode.getEdge(nextNode).length();
+    }
+    return timeToNode;
+  }
+
+  /**
    * picks up gold from a tile.
    * @param tile the tile to pick gold up from.
    * @param state the state of the escape phase.
@@ -124,10 +173,4 @@ public class EscapeRouteImpl implements EscapeRoute {
     }
   }
 
-  /**
-   *
-   */
-  public boolean exitFound(final EscapeState state) {
-    return state.getExit() == state.getCurrentNode();
-  }
 }
