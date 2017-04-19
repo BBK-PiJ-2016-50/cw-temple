@@ -13,10 +13,7 @@ import org.junit.Test;
 import student.EscapeRoute;
 import student.EscapeRouteImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Unit tests for {@see EscapeRoute}.
@@ -39,7 +36,17 @@ public class EscapeRouteTest {
   }
 
   //best gold route test
-  //take route test
+
+//  //take route test
+//  @Test
+//  public void testTakeRoute() {
+//    Node middleNode1 = mock(Node.class);
+//    Node middleNode2 = mock(Node.class);
+//    when(currentNode.getEdge(middleNode1))
+//    List<Node> pathNodes = new LinkedList<>();
+//
+//    EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
+//  }
 
   @Test
   public void testExitFound() {
@@ -60,9 +67,5 @@ public class EscapeRouteTest {
     EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
     assertFalse(route.exitFound(escape));
   }
-
-  //time to node test
-  //add nodes to route test
-  //collect gold test
 
 }
