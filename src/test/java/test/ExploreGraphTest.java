@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import game.ExplorationState;
 import game.NodeStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -126,6 +127,20 @@ public class ExploreGraphTest {
     assertEquals(6, graph.getNodesInGraph().size());
     assertEquals(1, graph.getNodeConnections().size());
 
+  }
+
+  @Test
+  public void testOrbFound() {
+    ExplorationState state = mock(ExplorationState.class);
+    when(state.getDistanceToTarget()).thenReturn(0);
+    assertTrue(graph.orbFound(state));
+  }
+
+  @Test
+  public void testOrbNotFound() {
+    ExplorationState state = mock(ExplorationState.class);
+    when(state.getDistanceToTarget()).thenReturn(100);
+    assertFalse(graph.orbFound(state));
   }
 
 }
