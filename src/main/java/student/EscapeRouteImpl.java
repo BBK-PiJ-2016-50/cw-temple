@@ -48,6 +48,11 @@ public class EscapeRouteImpl implements EscapeRoute {
   /**
    * constructor sets up the framework required for finding the best route
    * out of the cavern within time, whilst collecting as much gold as possible.
+   *
+   * @param startNode the node the explorer initially starts from.
+   * @param exitNode the node the explorer must get to escape.
+   * @param vertices a collection of all nodes on the map.
+   * @param escapeTime the amount of time given to escape the cavern.
    */
   public EscapeRouteImpl(
           Node startNode,
@@ -180,6 +185,7 @@ public class EscapeRouteImpl implements EscapeRoute {
    * this adds the nodes to the bestRoute list.
    * the first node is not added as otherwise it would be duplicated in the
    * escape route and the explorer wouldn't be able to move.
+   *
    * @param route the list of nodes to add to the bestRoute.
    */
   private void addNodesToRoute(List<Node> route) {
@@ -190,6 +196,7 @@ public class EscapeRouteImpl implements EscapeRoute {
 
   /**
    * picks up gold from a tile.
+   *
    * @param tile the tile to pick gold up from.
    * @param state the state of the escape phase.
    */

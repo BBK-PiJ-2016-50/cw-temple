@@ -17,6 +17,7 @@ public class Explorer {
   /**
    * allows the explorer to explore the cavern, trying to find the orb in as
    * few steps as possible. Once the orb is found the escape phase begins.
+   *
    * @param state the information available at the current state.
    */
   public void explore(final ExplorationState state) {
@@ -69,6 +70,7 @@ public class Explorer {
    * time is measured in the number of steps taken, and for each step the
    * time remaining is decremented by the weight of the edge taken.
    * the method returns once the exit is reached.
+   *
    * @param state the information available at the current state.
    */
   public void escape(final EscapeState state) {

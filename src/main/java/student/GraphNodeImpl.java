@@ -24,6 +24,7 @@ public class GraphNodeImpl implements GraphNode {
 
   /**
    * constructor for creating the graph node.
+   * 
    * @param nodeId the unique id for the node.
    * @param distanceToOrb the distance the node is from the orb.
    * @param hasBeenVisited indicates if the node has been visited or not.

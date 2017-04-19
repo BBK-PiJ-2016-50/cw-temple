@@ -60,6 +60,7 @@ public class EscapeRouteUtils {
    * available node on the map.  The shortest distances are stored in a map
    * which is then used by the {@see getRoute} method to construct a route to
    * a specified node.
+   *
    * @param startNode the node from which routes to all other nodes will be
    *                  calculated.
    */
@@ -89,6 +90,7 @@ public class EscapeRouteUtils {
   /**
    * returns the shortest path between the current node and the specified
    * end node.
+   *
    * @param endNode the node to which the shortest path should be built.
    * @return a list of nodes representing the shortest path between the
    *         current node and the end node.
@@ -113,6 +115,7 @@ public class EscapeRouteUtils {
 
   /**
    * find the node closest to the currentNode picked from the unvisited list.
+   *
    * @param unvisited the current set of unvisited nodes.
    * @return the node which is closest to the current node.
    */
@@ -128,6 +131,7 @@ public class EscapeRouteUtils {
 
   /**
    * find the neighbours for a given node that haven't yet been visited.
+   *
    * @param neighbours the set of neighbour nodes to check.
    * @return the list of unvisited neighbour nodes.
    */
@@ -145,6 +149,8 @@ public class EscapeRouteUtils {
    * update the shortest distance possible to a neighbour node.
    * then check if the distance to this neighbour can be reduced.
    * if yes then update distance and add node to unvisited nodes.
+   *
+   * @param unvNeighbours a list of nodes that have not been visited.
    */
   private void updateShortestDistance(final List<Node> unvNeighbours) {
     for (final Node neighbour : unvNeighbours) {
@@ -160,6 +166,7 @@ public class EscapeRouteUtils {
   /**
    * find the shortest distance to a node.
    * if it doesn't exist then assign it a maximum value.
+   *
    * @param target the node for which shortest distance is to be deduced.
    * @return the shortest distance.
    */

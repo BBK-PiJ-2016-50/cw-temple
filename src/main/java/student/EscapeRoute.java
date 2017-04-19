@@ -20,6 +20,7 @@ public interface EscapeRoute {
    * puts together a list of nodes that will allow the explorer to gather
    * as much gold as possible and still make it out of the cavern in time.
    * This method makes use of dijkstra's algorithm to put together the route.
+   *
    * @return a list of nodes constituting an optimal route for escaping
    *          whilst collecting as much gold as possible.
    */
@@ -29,6 +30,7 @@ public interface EscapeRoute {
    * executes the route to take whilst escaping.
    * this performs both movement of the explorer from node to node as well as
    * picking up the gold.
+   *
    * @param escapeRoute the list of nodes that constitutes the escape route.
    * @param state the current state of the escape phase.
    */
@@ -36,6 +38,7 @@ public interface EscapeRoute {
 
   /**
    * checks to see if exit found.  Exit is found if current node equals exit node.
+   *
    * @param state the information available at the current state.
    * @return boolean indicating whether the exit has been found or not.
    */
