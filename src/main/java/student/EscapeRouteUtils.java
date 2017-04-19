@@ -60,7 +60,6 @@ public class EscapeRouteUtils {
    * available node on the map.  The shortest distances are stored in a map
    * which is then used by the {@see getRoute} method to construct a route to
    * a specified node.
-   *
    * @param startNode the node from which routes to all other nodes will be
    *                  calculated.
    */

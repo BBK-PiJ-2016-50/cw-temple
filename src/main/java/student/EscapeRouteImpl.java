@@ -144,8 +144,8 @@ public class EscapeRouteImpl implements EscapeRoute {
 
     Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
     Node startNode = pathToTake.remove();
-    Node pathNode;
     collectGold(startNode.getTile(), state);
+    Node pathNode;
 
     while (!exitFound(state)) {
       pathNode = pathToTake.remove();
@@ -160,7 +160,7 @@ public class EscapeRouteImpl implements EscapeRoute {
    */
   @Override
   public boolean exitFound(final EscapeState state) {
-    return state.getExit() == state.getCurrentNode();
+    return state.getExit().equals(state.getCurrentNode());
   }
 
   /**
