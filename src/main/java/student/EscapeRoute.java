@@ -6,10 +6,9 @@ import game.Node;
 import java.util.List;
 
 /**
- * builds up a picture of the map for use when escaping using
- * Dijkstra's algorithm.  This find the shortest distance between two points.
- * the algorithm is then employed to find an optimal route for exiting the
- * cavern whilst finding as much gold as possible.
+ * builds up a picture of the map using Dijkstra's algorithm.  This finds the
+ * shortest distance between two points.  The algorithm is employed to find an
+ * optimal path for exiting the cavern whilst finding as much gold as possible.
  * see {@see EscapeRouteUtils} for Dijkstra methods.
  *
  * @author Ian Robinson
