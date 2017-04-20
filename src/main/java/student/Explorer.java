@@ -4,7 +4,6 @@ import game.EscapeState;
 import game.ExplorationState;
 import game.Node;
 import game.NodeStatus;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
@@ -32,8 +31,7 @@ public class Explorer {
     GraphNode currentNode = new GraphNodeImpl(
             state.getCurrentLocation(),
             state.getDistanceToTarget(),
-            true
-    );
+            true);
     exploreGraph.addNode(currentNode);
     nodeStack.push(currentNode);
 
@@ -52,7 +50,7 @@ public class Explorer {
         final GraphNode prevNode = nodeStack.peek();
         state.moveTo(prevNode.getNodeId());
         currentNode = prevNode;
-      } else { //if there are unvisited neighbours find best on to move to
+      } else { //if there are unvisited neighbours find best one to move to
         final GraphNode closestNodeToOrb = exploreGraph.getClosestNode(unvNeighbours);
         state.moveTo(closestNodeToOrb.getNodeId());
         closestNodeToOrb.setHasBeenVisited(true);
@@ -80,8 +78,7 @@ public class Explorer {
             state.getCurrentNode(),
             state.getExit(),
             state.getVertices(),
-            state.getTimeRemaining()
-    );
+            state.getTimeRemaining());
 
     //work out the best route for gold
     List<Node> bestGoldRoute = escapeRoute.bestGoldRoute();

@@ -3,7 +3,6 @@ package student;
 import game.EscapeState;
 import game.Node;
 import game.Tile;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -58,8 +57,7 @@ public class EscapeRouteImpl implements EscapeRoute {
           Node startNode,
           Node exitNode,
           Collection<Node> vertices,
-          int escapeTime
-  ) {
+          int escapeTime) {
     this.startNode = startNode;
     this.exitNode = exitNode;
     this.vertices = vertices;

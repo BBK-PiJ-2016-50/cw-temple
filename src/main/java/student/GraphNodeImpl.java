@@ -29,11 +29,9 @@ public class GraphNodeImpl implements GraphNode {
    * @param distanceToOrb the distance the node is from the orb.
    * @param hasBeenVisited indicates if the node has been visited or not.
    */
-  public GraphNodeImpl(
-          final long nodeId,
-          final int distanceToOrb,
-          final boolean hasBeenVisited
-  ) {
+  public GraphNodeImpl(final long nodeId,
+                       final int distanceToOrb,
+                       final boolean hasBeenVisited) {
     this.nodeId = nodeId;
     this.distanceToOrb = distanceToOrb;
     this.hasBeenVisited = hasBeenVisited;

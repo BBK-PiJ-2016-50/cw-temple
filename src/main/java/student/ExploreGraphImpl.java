@@ -2,7 +2,6 @@ package student;
 
 import game.ExplorationState;
 import game.NodeStatus;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -102,15 +101,13 @@ public class ExploreGraphImpl implements ExploreGraph {
   @Override
   public void addAndConnectNeighbours(
           final GraphNode currentNode,
-          final Collection<NodeStatus> neighbours
-  ) {
+          final Collection<NodeStatus> neighbours) {
     for (final NodeStatus neighbour : neighbours) {
       if (!idExists(neighbour.getId())) {
         final GraphNode newNode = new GraphNodeImpl(
                 neighbour.getId(),
                 neighbour.getDistanceToTarget(),
-                false
-        );
+                false);
         addNode(newNode);
         connectNode(currentNode, newNode);
       }
