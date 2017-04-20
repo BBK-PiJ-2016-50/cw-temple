@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * a set of tools for constructing a set of shortest possible routes from
- * a given start point.
+ * a given start point.  Based on Dijkstra's algorithm.
  */
 public class EscapeRouteUtils {
 
