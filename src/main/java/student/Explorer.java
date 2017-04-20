@@ -81,7 +81,7 @@ public class Explorer {
             state.getTimeRemaining());
 
     //work out the best route for gold
-    List<Node> bestGoldRoute = escapeRoute.bestGoldRoute();
+    final List<Node> bestGoldRoute = escapeRoute.bestGoldRoute();
 
     //follow this route and escape the cavern
     escapeRoute.takeRoute(bestGoldRoute, state);
