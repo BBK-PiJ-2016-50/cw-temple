@@ -20,33 +20,32 @@ public class EscapeRouteImpl implements EscapeRoute {
   /**
    * the node that the explorer starts from when escaping.
    */
-  private Node startNode;
+  private final Node startNode;
 
   /**
    * the node the explorer needs to get to in order to escape.
    */
-  private Node exitNode;
+  private final Node exitNode;
 
   /**
    * a collection of all nodes that make up the escape map.
    * provides information about gold and therefore which route to take
    * when escaping.
    */
-  private Collection<Node> vertices;
+  private final Collection<Node> vertices;
 
   /**
    * the time given to the explorer in which to escape from the cavern.
    */
-  private int escapeTime;
+  private final int escapeTime;
 
   /**
    * the best route for the explorer to take when escaping the cavern.
    */
-  private List<Node> bestRoute;
+  private final List<Node> bestRoute;
 
   /**
-   * constructor sets up the framework required for finding the best route
-   * out of the cavern within time, whilst collecting as much gold as possible.
+   * constructor sets up the framework for the escape route.
    *
    * @param startNode the node the explorer initially starts from.
    * @param exitNode the node the explorer must get to escape.
@@ -54,10 +53,10 @@ public class EscapeRouteImpl implements EscapeRoute {
    * @param escapeTime the amount of time given to escape the cavern.
    */
   public EscapeRouteImpl(
-          Node startNode,
-          Node exitNode,
-          Collection<Node> vertices,
-          int escapeTime) {
+          final Node startNode,
+          final Node exitNode,
+          final Collection<Node> vertices,
+          final int escapeTime) {
     this.startNode = startNode;
     this.exitNode = exitNode;
     this.vertices = vertices;
@@ -72,7 +71,7 @@ public class EscapeRouteImpl implements EscapeRoute {
   public List<Node> bestGoldRoute() {
 
     //stores nodes that have already been validated for gold.
-    Set<Node> visited = new HashSet<>();
+    final Set<Node> visited = new HashSet<>();
 
     //used to work out if explorer should abandon gold collection.
     int remainingTime = escapeTime;
@@ -86,18 +85,18 @@ public class EscapeRouteImpl implements EscapeRoute {
     while (!goToExit) {
 
       //get all paths from current node to all other nodes.
-      EscapeRouteUtils curNodePaths = new EscapeRouteUtils();
+      final EscapeRouteUtils curNodePaths = new EscapeRouteUtils();
       curNodePaths.findRoute(currentNode);
 
       //find closest node with gold from current position.
       Node closestGoldNode = vertices.iterator().next();
       int bestTimeToNode = Integer.MAX_VALUE;  //start off with max value.
-      for (Node n : vertices) {
+      for (final Node n : vertices) {
         //ensure only nodes that have not been checked and that have gold are validated
         if (!visited.contains(n) && n.getTile().getGold() > 0) {
-          List<Node> routeToNode = curNodePaths.getRoute(n);
+          final List<Node> routeToNode = curNodePaths.getRoute(n);
           //work out time it would take to get to the node
-          int time = timeToNode(routeToNode);
+          final int time = timeToNode(routeToNode);
           if (time <= bestTimeToNode) {
             bestTimeToNode = time;
             closestGoldNode = n;
@@ -106,24 +105,24 @@ public class EscapeRouteImpl implements EscapeRoute {
       }
 
       //check how long it would take to get to the exit from the closestGoldNode
-      EscapeRouteUtils pathUtilsToExit = new EscapeRouteUtils();
+      final EscapeRouteUtils pathUtilsToExit = new EscapeRouteUtils();
       pathUtilsToExit.findRoute(closestGoldNode);
-      List<Node> routeToExit = pathUtilsToExit.getRoute(exitNode);
-      int timeToExit = timeToNode(routeToExit);
+      final List<Node> routeToExit = pathUtilsToExit.getRoute(exitNode);
+      final int timeToExit = timeToNode(routeToExit);
 
       //add times to find out if the route is doable before time runs out.
-      int totalTime = bestTimeToNode + timeToExit;
+      final int totalTime = bestTimeToNode + timeToExit;
 
       //head to exit straight away if the route to the next gold node is not
       //achievable, or if there are no nodes remaining with gold.
-      List<Node> getOutNow = curNodePaths.getRoute(exitNode);
+      final List<Node> getOutNow = curNodePaths.getRoute(exitNode);
       if (totalTime > remainingTime || bestTimeToNode == Integer.MAX_VALUE) {
         addNodesToRoute(getOutNow);
         goToExit = true;
       } else {
         //if doable then get the route to the node and add to the bestRoute.
         currentNode = closestGoldNode;
-        List<Node> routeToNode = curNodePaths.getRoute(closestGoldNode);
+        final List<Node> routeToNode = curNodePaths.getRoute(closestGoldNode);
         addNodesToRoute(routeToNode);
         //ensures nodes that have been assessed are not checked again.
         visited.addAll(routeToNode);
@@ -138,19 +137,18 @@ public class EscapeRouteImpl implements EscapeRoute {
    * {@inheritDoc}.
    */
   @Override
-  public void takeRoute(List<Node> escapeRoute, EscapeState state) {
-
-    Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
-    Node startNode = pathToTake.remove();
+  public void takeRoute(
+          final List<Node> escapeRoute,
+          final EscapeState state) {
+    final Queue<Node> pathToTake = new LinkedList<>(escapeRoute);
+    final Node startNode = pathToTake.remove();
     collectGold(startNode.getTile(), state);
     Node pathNode;
-
     while (!exitFound(state)) {
       pathNode = pathToTake.remove();
       state.moveTo(pathNode);
       collectGold(pathNode.getTile(), state);
     }
-
   }
 
   /**
@@ -169,11 +167,11 @@ public class EscapeRouteImpl implements EscapeRoute {
    * @return the time it would take, based on the sum of the edges, to traverse
    *         the map from the start node to the end node.
    */
-  private int timeToNode(List<Node> route) {
+  private int timeToNode(final List<Node> route) {
     int timeToNode = 0;
     for (int i = 0; i < route.size() - 1; i++) {
-      Node curNode = route.get(i);
-      Node nextNode = route.get(i + 1);
+      final Node curNode = route.get(i);
+      final Node nextNode = route.get(i + 1);
       timeToNode += curNode.getEdge(nextNode).length();
     }
     return timeToNode;
@@ -186,7 +184,7 @@ public class EscapeRouteImpl implements EscapeRoute {
    *
    * @param route the list of nodes to add to the bestRoute.
    */
-  private void addNodesToRoute(List<Node> route) {
+  private void addNodesToRoute(final List<Node> route) {
     for (int i = 1; i < route.size(); i++) {
       bestRoute.add(route.get(i));
     }
