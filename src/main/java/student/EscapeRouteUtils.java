@@ -51,7 +51,6 @@ public class EscapeRouteUtils {
     this.distanceToNode = new HashMap<>();
     this.unvisited = new HashSet<>();
     this.visited = new HashSet<>();
-    this.closestNode = null;
   }
 
   /**
