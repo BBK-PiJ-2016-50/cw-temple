@@ -18,7 +18,7 @@ public class GraphNodeTest {
 
   @Before
   public void setUp() {
-     node = new GraphNodeImpl(56, 15, false);
+    node = new GraphNodeImpl(56, 15, false);
   }
 
   @Test

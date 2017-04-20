@@ -1,6 +1,5 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -8,12 +7,13 @@ import static org.mockito.Mockito.when;
 
 import game.EscapeState;
 import game.Node;
+import java.util.Collection;
+import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
 import student.EscapeRoute;
 import student.EscapeRouteImpl;
 
-import java.util.*;
 
 /**
  * Unit tests for {@see EscapeRoute}.
@@ -35,19 +35,6 @@ public class EscapeRouteTest {
     vertices = new HashSet<>();
   }
 
-  //best gold route test
-
-//  //take route test
-//  @Test
-//  public void testTakeRoute() {
-//    Node middleNode1 = mock(Node.class);
-//    Node middleNode2 = mock(Node.class);
-//    when(currentNode.getEdge(middleNode1))
-//    List<Node> pathNodes = new LinkedList<>();
-//
-//    EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
-//  }
-
   @Test
   public void testExitFound() {
     vertices.add(currentNode);
@@ -67,5 +54,6 @@ public class EscapeRouteTest {
     EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
     assertFalse(route.exitFound(escape));
   }
+
 
 }

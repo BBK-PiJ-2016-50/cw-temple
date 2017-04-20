@@ -8,17 +8,15 @@ import static org.mockito.Mockito.when;
 
 import game.ExplorationState;
 import game.NodeStatus;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import student.ExploreGraph;
 import student.ExploreGraphImpl;
 import student.GraphNode;
 import student.GraphNodeImpl;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 
 /**
  * Unit tests for {@see ExploreGraph}.
