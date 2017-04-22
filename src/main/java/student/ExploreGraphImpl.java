@@ -18,13 +18,21 @@ public class ExploreGraphImpl implements ExploreGraph {
   /**
    * list of all nodes that have been added to the graph.
    */
-  private final List<GraphNode> nodesInGraph = new ArrayList<>();
+  private final List<GraphNode> nodesInGraph;
 
   /**
    * map of each node and their child nodes.
    * provides a complete picture of the graph's node connections.
    */
-  private final Map<GraphNode, List<GraphNode>> nodeConnections = new ConcurrentHashMap<>();
+  private final Map<GraphNode, List<GraphNode>> nodeConnections;
+
+  /**
+   * constructor to set up the graph for exploration.
+   */
+  public ExploreGraphImpl() {
+    this.nodesInGraph = new ArrayList<>();
+    this.nodeConnections = new ConcurrentHashMap<>();
+  }
 
   /**
    * {@inheritDoc}.
