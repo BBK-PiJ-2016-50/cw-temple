@@ -30,12 +30,12 @@ public class EscapeRouteUtils {
   /**
    * a set of nodes which haven't been evaluated.
    */
-  private final Set<Node> unvisited;
+  private final List<Node> unvisited;
 
   /**
    * a set of nodes which have been evaluated.
    */
-  private final Set<Node> visited;
+  private final List<Node> visited;
 
   /**
    * the closest node to a node selected from the unvisited list.
@@ -49,8 +49,8 @@ public class EscapeRouteUtils {
   public EscapeRouteUtils() {
     this.pathNodes = new HashMap<>();
     this.distanceToNode = new HashMap<>();
-    this.unvisited = new HashSet<>();
-    this.visited = new HashSet<>();
+    this.unvisited = new LinkedList<>();
+    this.visited = new LinkedList<>();
   }
 
   /**
@@ -74,7 +74,7 @@ public class EscapeRouteUtils {
 
       //for the closest node find all the closest node's neighbour nodes
       final Set<Node> neighbours = closestNode.getNeighbours();
-      final List<Node> unvNeighbours = findUnvNeighbours(neighbours);
+      final Set<Node> unvNeighbours = findUnvNeighbours(neighbours);
 
       //use the unvisited neighbours to see if the shortest distance for
       //the closest node can be improved upon.
@@ -116,8 +116,8 @@ public class EscapeRouteUtils {
    * @param unvisited the current set of unvisited nodes.
    * @return the node which is closest to the current node.
    */
-  private Node findClosestNode(final Set<Node> unvisited) {
-    Node closestNode = unvisited.iterator().next();
+  private Node findClosestNode(final List<Node> unvisited) {
+    Node closestNode = unvisited.get(0);
     for (final Node node : unvisited) {
       if (getShortestDistance(node) < getShortestDistance(closestNode)) {
         closestNode = node;
@@ -132,8 +132,8 @@ public class EscapeRouteUtils {
    * @param neighbours the set of neighbour nodes to check.
    * @return the list of unvisited neighbour nodes.
    */
-  private List<Node> findUnvNeighbours(final Set<Node> neighbours) {
-    final List<Node> unvNeighbours = new ArrayList<>();
+  private Set<Node> findUnvNeighbours(final Set<Node> neighbours) {
+    final Set<Node> unvNeighbours = new HashSet<>();
     for (final Node n : neighbours) {
       if (!visited.contains(n)) {
         unvNeighbours.add(n);
@@ -149,11 +149,12 @@ public class EscapeRouteUtils {
    *
    * @param unvNeighbours a list of nodes that have not been visited.
    */
-  private void updateShortestDistance(final List<Node> unvNeighbours) {
+  private void updateShortestDistance(final Set<Node> unvNeighbours) {
     for (final Node neighbour : unvNeighbours) {
       final Edge edge = closestNode.getEdge(neighbour);
-      if (getShortestDistance(neighbour) > getShortestDistance(closestNode) + edge.length()) {
-        distanceToNode.put(neighbour, getShortestDistance(closestNode) + edge.length());
+      int shortestLength = getShortestDistance(closestNode) + edge.length();
+      if (getShortestDistance(neighbour) > shortestLength) {
+        distanceToNode.put(neighbour, shortestLength);
         pathNodes.put(neighbour, closestNode);
         unvisited.add(neighbour);
       }

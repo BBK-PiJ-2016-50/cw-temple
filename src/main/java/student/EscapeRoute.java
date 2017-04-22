@@ -2,7 +2,6 @@ package student;
 
 import game.EscapeState;
 import game.Node;
-
 import java.util.List;
 
 /**

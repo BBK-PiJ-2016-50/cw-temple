@@ -32,7 +32,7 @@ public class EscapeRouteImpl implements EscapeRoute {
    * provides information about gold and therefore which route to take
    * when escaping.
    */
-  private final LinkedList<Node> vertices;
+  private final List<Node> vertices;
 
   /**
    * the time given to the explorer in which to escape from the cavern.
