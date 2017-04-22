@@ -119,7 +119,7 @@ public class ExploreGraphImpl implements ExploreGraph {
    */
   @Override
   public GraphNode getClosestNode(final List<GraphNode> unvNeighbours) {
-    GraphNode closestNode = unvNeighbours.iterator().next();
+    GraphNode closestNode = unvNeighbours.get(0);
     for (final GraphNode neighbour : unvNeighbours) {
       if (neighbour.getDistanceToOrb() < closestNode.getDistanceToOrb()) {
         closestNode = neighbour;
