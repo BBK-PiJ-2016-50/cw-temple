@@ -32,7 +32,7 @@ public class EscapeRouteImpl implements EscapeRoute {
    * provides information about gold and therefore which route to take
    * when escaping.
    */
-  private final Collection<Node> vertices;
+  private final LinkedList<Node> vertices;
 
   /**
    * the time given to the explorer in which to escape from the cavern.
@@ -59,7 +59,7 @@ public class EscapeRouteImpl implements EscapeRoute {
           final int escapeTime) {
     this.startNode = startNode;
     this.exitNode = exitNode;
-    this.vertices = vertices;
+    this.vertices = new LinkedList<>(vertices);
     this.escapeTime = escapeTime;
     this.bestRoute = new LinkedList<>();
   }
@@ -89,7 +89,7 @@ public class EscapeRouteImpl implements EscapeRoute {
       curNodePaths.findRoute(currentNode);
 
       //find closest node with gold from current position.
-      Node closestGoldNode = vertices.iterator().next();
+      Node closestGoldNode = vertices.get(0);
       int bestTimeToNode = Integer.MAX_VALUE;  //start off with max value.
       for (final Node n : vertices) {
         //ensure only nodes that have not been checked and that have gold are validated
