@@ -42,8 +42,8 @@ public class ExploreGraphTest {
 
   @Test
   public void testConnectNode() {
-    GraphNode parent = new GraphNodeImpl(10, 20, false);
-    GraphNode child = new GraphNodeImpl(15, 10, true);
+    final GraphNode parent = new GraphNodeImpl(10, 20, false);
+    final GraphNode child = new GraphNodeImpl(15, 10, true);
     graph.addNode(parent);
     graph.addNode(child);
     graph.connectNode(parent, child);
@@ -65,10 +65,10 @@ public class ExploreGraphTest {
 
   @Test
   public void testGetUnvisitedNeighbours() {
-    GraphNode nodeA = new GraphNodeImpl(100, 10, true);
-    GraphNode nodeB = new GraphNodeImpl(101, 15, false);
-    GraphNode nodeC = new GraphNodeImpl(102, 20, false);
-    GraphNode nodeD = new GraphNodeImpl(103, 5, true);
+    final GraphNode nodeA = new GraphNodeImpl(100, 10, true);
+    final GraphNode nodeB = new GraphNodeImpl(101, 15, false);
+    final GraphNode nodeC = new GraphNodeImpl(102, 20, false);
+    final GraphNode nodeD = new GraphNodeImpl(103, 5, true);
     graph.connectNode(nodeA, nodeB);
     graph.connectNode(nodeA, nodeC);
     graph.connectNode(nodeA, nodeD);
@@ -78,10 +78,10 @@ public class ExploreGraphTest {
 
   @Test
   public void testNoUnvisitedNeighbours() {
-    GraphNode nodeA = new GraphNodeImpl(100, 10, true);
-    GraphNode nodeB = new GraphNodeImpl(101, 15, true);
-    GraphNode nodeC = new GraphNodeImpl(102, 20, true);
-    GraphNode nodeD = new GraphNodeImpl(103, 5, true);
+    final GraphNode nodeA = new GraphNodeImpl(100, 10, true);
+    final GraphNode nodeB = new GraphNodeImpl(101, 15, true);
+    final GraphNode nodeC = new GraphNodeImpl(102, 20, true);
+    final GraphNode nodeD = new GraphNodeImpl(103, 5, true);
     graph.connectNode(nodeA, nodeB);
     graph.connectNode(nodeA, nodeC);
     graph.connectNode(nodeA, nodeD);
@@ -91,10 +91,10 @@ public class ExploreGraphTest {
 
   @Test
   public void testGetClosestNode() {
-    GraphNode nodeA = new GraphNodeImpl(100, 10, true);
-    GraphNode nodeB = new GraphNodeImpl(101, 15, false);
-    GraphNode nodeC = new GraphNodeImpl(102, 20, false);
-    GraphNode nodeD = new GraphNodeImpl(103, 5, false);
+    final GraphNode nodeA = new GraphNodeImpl(100, 10, true);
+    final GraphNode nodeB = new GraphNodeImpl(101, 15, false);
+    final GraphNode nodeC = new GraphNodeImpl(102, 20, false);
+    final GraphNode nodeD = new GraphNodeImpl(103, 5, false);
     graph.connectNode(nodeA, nodeB);
     graph.connectNode(nodeA, nodeC);
     graph.connectNode(nodeA, nodeD);
@@ -104,18 +104,18 @@ public class ExploreGraphTest {
 
   @Test
   public void testAddAndConnectNeighbours() {
-    GraphNode nodeA = new GraphNodeImpl(1, 5, false);
+    final GraphNode nodeA = new GraphNodeImpl(1, 5, false);
     graph.addNode(nodeA);
-    Collection<NodeStatus> neighbours = new ArrayList<>();
+    final Collection<NodeStatus> neighbours = new ArrayList<>();
     int total = 0;
-    long id = 20;
+    long nodeId = 20;
     while (total < 5) {
       NodeStatus neighbour = mock(NodeStatus.class);
       neighbours.add(neighbour);
-      when(neighbour.getId()).thenReturn(id);
+      when(neighbour.getId()).thenReturn(nodeId);
       when(neighbour.getDistanceToTarget()).thenReturn(total + 1);
       total++;
-      id++;
+      nodeId++;
     }
     graph.addAndConnectNeighbours(nodeA, neighbours);
 
@@ -129,14 +129,14 @@ public class ExploreGraphTest {
 
   @Test
   public void testOrbFound() {
-    ExplorationState state = mock(ExplorationState.class);
+    final ExplorationState state = mock(ExplorationState.class);
     when(state.getDistanceToTarget()).thenReturn(0);
     assertTrue(graph.orbFound(state));
   }
 
   @Test
   public void testOrbNotFound() {
-    ExplorationState state = mock(ExplorationState.class);
+    final ExplorationState state = mock(ExplorationState.class);
     when(state.getDistanceToTarget()).thenReturn(100);
     assertFalse(graph.orbFound(state));
   }

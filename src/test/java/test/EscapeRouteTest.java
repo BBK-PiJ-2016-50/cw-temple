@@ -41,7 +41,7 @@ public class EscapeRouteTest {
     vertices.add(exitNode);
     when(escape.getCurrentNode()).thenReturn(exitNode);
     when(escape.getExit()).thenReturn(exitNode);
-    EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
+    final EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
     assertTrue(route.exitFound(escape));
   }
 
@@ -51,7 +51,7 @@ public class EscapeRouteTest {
     vertices.add(exitNode);
     when(escape.getCurrentNode()).thenReturn(currentNode);
     when(escape.getExit()).thenReturn(exitNode);
-    EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
+    final EscapeRoute route = new EscapeRouteImpl(currentNode, exitNode, vertices, 100);
     assertFalse(route.exitFound(escape));
   }
 

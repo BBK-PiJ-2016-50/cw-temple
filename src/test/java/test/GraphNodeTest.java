@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +26,7 @@ public class GraphNodeTest {
   @Test
   public void testSetHasBeenVisited() {
     node.setHasBeenVisited(true);
-    assertEquals(true, node.getHasBeenVisited());
+    assertTrue(node.getHasBeenVisited());
   }
 
   @Test
@@ -39,7 +41,7 @@ public class GraphNodeTest {
 
   @Test
   public void testGetHasBeenVisited() {
-    assertEquals(false, node.getHasBeenVisited());
+    assertFalse(node.getHasBeenVisited());
   }
 
 }
