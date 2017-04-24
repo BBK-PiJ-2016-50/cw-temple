@@ -7,11 +7,20 @@ There are two phases to this, the explore phase and the escape phase.
 ### Explore Phase
 The explorer must find their way to the orb, however the layout of the cavern is unknown, except for information regarding the tile the explorer is standing on and the neighbouring tiles.
 The route must be ideally be done in as few steps as possible as this will help to get a better score at the end.
+The implemented solution builds up a map of nodes.  At each point the node is added to a stack.  The neighbours are then evaluated and a closest node to the orb is picked. The process then begins again.
+If a dead end is reached, the nodes are popped from the stack until it a node with an unvisited neighbour is reached.  This neighbour is then moved to and the process repeats.
 
 ### Escape Phase
 Once the orb has been found the escape phase begins.  The cavern completely changes, however the explorer is provided with the exact layout of the cavern.  Tiles may also contain gold.
 The explorer must collect as much gold as possible and find the exit before the time runs out.  A further issue to deal with is that the time does not decrease sequentially and is dependent 
 on the weight of the edges that connect the nodes of the cavern.
+The implemented solution uses Dijkstra's algorithm to find shortest routes between nodes.
+At each point an optimal route from the current position to the gold tile is generated.  In the same step the optimal route from that gold tile to the exit is calculated.  
+The nodes that form this route each have edges of different values.  These are added together and compared to the time remaining.
+If this value is less than the time remaining, the explorer can go and collect the gold from the tile, and the route to the tile is added to a bestRoute list.
+At each step this process is repeated, and the bestRoute is gradually built up.
+At the point that there is not enough time to collect gold then the explorer immediately goes to the exit.
+If the route to the exit contains gold, then this is picked up as well.
 
 At the end of the explore phase the bonus multiplier and the gold are multiplied together to give a score.
 
