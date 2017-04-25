@@ -12,9 +12,9 @@ If a dead end is reached, the nodes are popped from the stack until it a node wi
 
 ### Escape Phase
 Once the orb has been found the escape phase begins.  The cavern completely changes, however the explorer is provided with the exact layout of the cavern.  Tiles may also contain gold.
-The explorer must collect as much gold as possible and find the exit before the time runs out.  A further issue to deal with is that the time does not decrease sequentially and is dependent on the weighted values edges that connect the nodes of the cavern.
+The explorer must collect as much gold as possible and find the exit before the time runs out.  A further issue to deal with is that the time does not decrease sequentially and is dependent on the weighted values of the edges that connect the nodes of the cavern.
 The implemented solution uses Dijkstra's algorithm to find shortest routes between nodes.
-At each point an optimal route from the current position to the gold tile is generated.  In the same step the optimal route from that gold tile to the exit is calculated.  
+At each point an optimal route from the current position to the nearest gold tile is generated.  In the same step the optimal route from that gold tile to the exit is calculated.  
 The nodes that form this route each have edges of different values.  These are added together and compared to the time remaining.
 If this value is less than the time remaining, the explorer can go and collect the gold from the tile, and the route to the tile is added to a bestRoute list.
 At each step this process is repeated, and the bestRoute list is gradually built up.
@@ -27,9 +27,9 @@ The solution has been run through 1000's of different seeds and appears to succe
 However, in terms of gaining as high a score as possible, there are a couple of limitations with the solution:
 
 * In the explore phase, when checking for the next closest node to the orb, if there are two or more nodes that are the same distance away, no further checks are made on which one of these would be best to take.
-The solution selects one of them and goes with it.  If it turns out to be the wrong option, there is no corrective action, and in some cases this can lead the explorer to incorrectly explore a large section of the cavern before back-tracking their way back to the place where the original route decision was made.
-This can in some cases lead the bonus multiplier to drop to 1.
-A potential solution may involve checking if there is more than one node that have an equal distance to the orb.  If there is then choose one and move to it.
+The solution selects one of them and goes with it.  If it turns out to be the wrong option, there is no corrective action, and in some cases this can lead the explorer wating their time by exploring a large and irrelevant section of the cavern before back-tracking their way back to the place where the original route decision was made.
+This can, in some cases, lead the bonus multiplier to drop to 1.
+A potential solution may involve first checking to see if there is more than one node with equal distances to the orb.  If there is then choose one and move to it.
 If a neighbour of this node is now closer to the orb, then keep going with this route.  However if it has taken the explorer further away, then the explorer needs to backtrack and take one of the other closest node options from the previous step.
 
 * In the escape phase, the explorer doesn't favour tiles with higher amounts of gold over those with lesser amounts of gold.  The solution only looks at which is the next closest tile with gold of any value.
