@@ -8,7 +8,7 @@ There are two phases to this - the explore phase and the escape phase.
 The explorer must find their way to the orb, however the layout of the cavern is unknown, except for information regarding the tile the explorer is standing on and its neighbouring tiles.
 The route must ideally be done in as few steps as possible as this will help to get a better score at the end.
 The implemented solution builds up a map of nodes.  At each point the node is added to a stack.  The neighbours of the node are then evaluated and a closest neighbour to the orb is picked. This neighbour is then moved to and the process begins again.
-If a dead end is reached, the nodes are popped from the stack until it a node with an unvisited neighbour is reached.  This neighbour is then moved to and the process repeats.
+If a dead end is reached, the nodes are popped from the stack until a node with an unvisited neighbour is reached.  This neighbour is then moved to and the process repeats.
 
 ### Escape Phase
 Once the orb has been found the escape phase begins.  The cavern completely changes, however the explorer is provided with the exact layout of the cavern.  Tiles may also contain gold.
