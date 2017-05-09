@@ -27,7 +27,7 @@ The solution has been run through 1000's of different seeds and appears to succe
 However, in terms of gaining as high a score as possible, there are a couple of limitations with the solution:
 
 * In the explore phase, when checking for the next closest node to the orb, if there are two or more nodes that are the same distance away, no further checks are made on which one of these would be best to take.
-The solution selects one of them and goes with it.  If it turns out to be the wrong option, there is no corrective action, and in some cases this can lead the explorer wating their time by exploring a large and irrelevant section of the cavern before back-tracking their way back to the place where the original route decision was made.
+The solution selects one of them and goes with it.  If it turns out to be the wrong option, there is no corrective action, and in some cases this can lead the explorer wasting their time by exploring a large and irrelevant section of the cavern before back-tracking their way back to the place where the original route decision was made.
 This can, in some cases, lead the bonus multiplier to drop to 1.
 A potential solution may involve first checking to see if there is more than one node with equal distances to the orb.  If there is then choose one and move to it.
 If a neighbour of this node is now closer to the orb, then keep going with this route.  However if it has taken the explorer further away, then the explorer needs to backtrack and take one of the other closest node options from the previous step.
